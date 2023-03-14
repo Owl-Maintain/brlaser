@@ -1,14 +1,16 @@
 brlaser: Brother laser printer driver
 =====================================
 
-brlaser is a CUPS driver for Brother laser printers.
+brlaser is an open-source CUPS driver designed specifically for Brother monochrome laser printers and multi-function devices.
 
-Although most Brother printers support a standard printer language
-such as PCL or PostScript, not all do. If you have a monochrome
-Brother laser printer (or multi-function device) and the other open
-source drivers don't work, this one might help.
+While most Brother printers can use standard printer languages like PCL or PostScript, some models do not. If you have a monochrome Brother laser printer (or multi-function device) and the other open-source drivers are not working, brlaser might be able to help. Additionally, there have been reports of some non-Brother printers working with this driver.
 
-This driver has been reported to work with these printers:
+The software is released under the GNU General Public License, which grants the right to freely use, distribute, and modify the program without requiring any permission from the software's author or any fees.
+
+
+Supported Printers
+------------------
+The following printers have been reported to work with this driver:
 
 * Brother DCP-1510 series
 * Brother DCP-1600 series
@@ -76,51 +78,58 @@ This driver has been reported to work with these printers:
 * Lenovo LJ2650DN
 
 
-Other printers
---------------
-
-If your printer isn't included in the list above, just try selecting
-any entry marked 'brlaser' and see if it works.
-
-If it does, please create a new issue here in Github and include the
-output of this command:
-
-    sudo lpinfo --include-schemes usb -l -v
-
-Then I'll be able to add a proper entry for your printer.
-
-
 Installation
 ------------
 
-Some operating systems already ship this driver. This is the case for
-at least Debian, Gentoo, Ubuntu, Raspbian, openSUSE, NixOS, Arch Linux 
-and Guix.
-Look for a package named `printer-driver-brlaser`.
+Some operating systems already ship this driver. This is the case for at least Debian, Gentoo, Ubuntu, Raspbian, openSUSE, NixOS, Arch Linux and Guix. 
 
-You'll also need Ghostscript, in case that's not installed
-automatically.
+Look for a package named ``printer-driver-brlaser``.
 
-Once brlaser is installed, you can add your printer using the usual
-CUPS interface.
+You'll also need ``Ghostscript``, in case that's not installed automatically.
+
+Once brlaser is installed, you can add your printer using the usual CUPS interface.
+
+
+Testing Other Printers
+----------------------
+
+If your printer is not officially supported, you can try selecting any driver marked as ``brlaser`` to test if the driver will work for your printer.
+
+If you are able to successfully print, please open a new issue on Github and select "Report Compatible Printer".
+
+When submitting the compatibility report, connect your printer to your computer via USB and run the following command:
+
+``sudo lpinfo --include-schemes usb -l -v``
+
+Please provide the output of the command so that we can add the proper entry for your specific printer model in the driver.
+
+Example of output:
+````
+Device: uri = usb://Brother/HL-2270DW%20series?serial=000000000000
+        class = direct
+        info = Brother HL-2270DW series
+        make-and-model = Brother HL-2270DW series
+        device-id = MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2270DW series;CLS:PRINTER;CID:Brother Laser Type1;
+        location = 
+````
 
 
 Building from source
 --------------------
 
-To compile brlaser you'll need CMake and the CUPS development packages
-(libcups2-dev, libcupsimage2-dev or similar).
+To compile brlaser from source, you will need to have CMake and the CUPS development packages (such as cups-devel, libcups2-dev, or libcupsimage2-dev) installed on your system.
 
-Get the code by cloning the git repo <!-- or downloading the [latest
-release] -->. Compile and install with these commands:
+You can get the source code by cloning the Git repository or downloading the [latest release](https://github.com/pdewacht/brlaser/releases/latest).
 
-    cmake .
-    make
-    sudo make install
+To compile and install the driver, use the following commands:
 
-It might be needed to restart CUPS after this.
+````
+cmake .
+make
+sudo make install
+````
 
-[latest release]: https://github.com/pdewacht/brlaser/releases/latest
+Note that you may need to restart CUPS before the driver is loaded and ready to use.
 
 
 Copyright
