@@ -14,6 +14,7 @@ The following printers have been reported to work with this driver:
 
 * Brother DCP-1510 series
 * Brother DCP-1600 series
+* Brother DCP-1610W series
 * Brother DCP-7020
 * Brother DCP-7030
 * Brother DCP-7040
@@ -32,6 +33,7 @@ The following printers have been reported to work with this driver:
 * Brother DCP-L2537DW
 * Brother DCP-L2540DW series
 * Brother DCP-L2550DW series
+* Brother FAX-2820
 * Brother HL-1110 series
 * Brother HL-1200 series
 * Brother HL-2030 series
