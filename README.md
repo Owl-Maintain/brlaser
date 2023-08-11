@@ -88,7 +88,7 @@ The following printers have been reported to work with this driver:
 Installation
 ------------
 
-Some operating systems already ship this driver. This is the case for at least Debian, Gentoo, Ubuntu, Raspbian, openSUSE, NixOS, Arch Linux and Guix. 
+Some operating systems already ship this driver. This is the case for at least Debian, Gentoo, Ubuntu, Raspbian, openSUSE, NixOS, Arch Linux, Guix and Fedora.
 
 Look for a package named ``printer-driver-brlaser``.
 
