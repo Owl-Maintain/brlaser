@@ -364,6 +364,15 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
 }
 
 {
+  ModelName "HL-5370DW series"
+  Attribute "NickName" "" "Brother HL-5370DW series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-5370DW series;CLS:PRINTER;"
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
+  Duplex normal
+  PCFileName "br5370d.ppd"
+}
+
+{
   ModelName "HL-L2300D series"
   Attribute "NickName" "" "Brother HL-L2300D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-L2300D series;CLS:PRINTER;CID:Brother Laser Type1;"
