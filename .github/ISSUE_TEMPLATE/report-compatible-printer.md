@@ -18,7 +18,6 @@ INSERT TERMINAL OUTPUT HERE
 
 **Verified**: <!-- please mark [x] what you have tested -->
 - [ ] test page printed
-- [ ] test page printed
 - [ ] tested 300dpi
 - [ ] tested 600dpi
 - [ ] tested 1200dpi
