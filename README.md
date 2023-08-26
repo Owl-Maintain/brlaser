@@ -46,6 +46,7 @@ This driver has been reported to work with these printers:
 * Brother HL-2280DW
 * Brother HL-5030 series
 * Brother HL-5040 series
+* Brother HL-5370DW series
 * Brother HL-L2300D series
 * Brother HL-L2305 series
 * Brother HL-L2310D series
