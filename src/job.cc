@@ -69,6 +69,8 @@ void job::write_page_header() {
           page_params_.sourcetray.c_str());
   fprintf(out_, "@PJL SET MEDIATYPE = %s\n",
           page_params_.mediatype.c_str());
+  fprintf(out_, "@PJL SET DENSITY=%d\n", page_params_.density_adjust);
+  fprintf(out_, "@PJL SET DEVBIASADJUST=%d\n", page_params_.density_adjust);
   fprintf(out_, "@PJL SET PAPER = %s\n",
           page_params_.papersize.c_str());
   fprintf(out_, "@PJL SET PAGEPROTECT = AUTO\n");
