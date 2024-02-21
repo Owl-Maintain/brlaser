@@ -109,6 +109,7 @@ page_params build_page_params(const cups_page_header2_t &header) {
   p.num_copies = header.NumCopies;
   p.resolution = header.HWResolution[0];
   p.economode = header.cupsInteger[10];
+  p.density_adjust = (header.cupsInteger[11] - 100);
   p.mediatype = header.MediaType;
   p.duplex = header.Duplex;
   p.tumble = header.Tumble;

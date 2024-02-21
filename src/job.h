@@ -29,6 +29,7 @@ struct page_params {
   bool duplex;
   bool tumble;
   bool economode;
+  int density_adjust;
   std::string sourcetray;
   std::string mediatype;
   std::string papersize;
@@ -39,6 +40,7 @@ struct page_params {
       && duplex == o.duplex
       && tumble == o.tumble
       && economode == o.economode
+      && density_adjust == o.density_adjust
       && sourcetray == o.sourcetray
       && mediatype == o.mediatype
       && papersize == o.papersize;
