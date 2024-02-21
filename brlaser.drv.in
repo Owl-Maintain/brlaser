@@ -78,6 +78,21 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   *Choice False/Off "<</cupsInteger10 0>>setpagedevice"
   Choice True/On "<</cupsInteger10 1>>setpagedevice"
 
+Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
+  Choice "94/-6 (lighter)" "<</cupsInteger11 94>>setpagedevice"
+  Choice "95/-5 (lighter)" "<</cupsInteger11 95>>setpagedevice"
+  Choice "96/-4 (lighter)" "<</cupsInteger11 96>>setpagedevice"
+  Choice "97/-3 (lighter)" "<</cupsInteger11 97>>setpagedevice"
+  Choice "98/-2 (lighter)" "<</cupsInteger11 98>>setpagedevice"
+  Choice "99/-1 (lighter)" "<</cupsInteger11 99>>setpagedevice"
+  *Choice "100/0 (default)" "<</cupsInteger11 100>>setpagedevice"
+  Choice "101/+1 (darker)" "<</cupsInteger11 101>>setpagedevice"
+  Choice "102/+2 (darker)" "<</cupsInteger11 102>>setpagedevice"
+  Choice "103/+3 (darker)" "<</cupsInteger11 103>>setpagedevice"
+  Choice "104/+4 (darker)" "<</cupsInteger11 104>>setpagedevice"
+  Choice "105/+5 (darker)" "<</cupsInteger11 105>>setpagedevice"
+  Choice "106/+6 (darker)" "<</cupsInteger11 106>>setpagedevice"
+
 {
   ModelName "Test Driver"
   Attribute "NickName" "" "Brother A @CMAKE_PROJECT_NAME@ Test Driver, v@BRLASER_VERSION@; compatible with monochrome laser printers"
