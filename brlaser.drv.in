@@ -78,6 +78,22 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   *Choice False/Off "<</cupsInteger10 0>>setpagedevice"
   Choice True/On "<</cupsInteger10 1>>setpagedevice"
 
+{
+  ModelName "Test Driver"
+  Attribute "NickName" "" "Brother A @CMAKE_PROJECT_NAME@ Test Driver, v@BRLASER_VERSION@; compatible with monochrome laser printers"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:brlaser Test Driver;CLS:PRINTER;"
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
+  PCFileName "br0000.ppd"
+}
+
+{
+  ModelName "Test Driver Duplex"
+  Attribute "NickName" "" "Brother A @CMAKE_PROJECT_NAME@ Test Driver Duplex, v@BRLASER_VERSION@; compatible with duplex monochrome laser printers"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:brlaser Test Driver Duplex;CLS:PRINTER;"
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
+  Duplex rotated
+  PCFileName "br0000d.ppd"
+}
 
 {
   ModelName "DCP-1510 series"
