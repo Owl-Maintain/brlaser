@@ -102,6 +102,13 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
 }
 
 {
+  ModelName "DCP-7010"
+  Attribute "NickName" "" "Brother DCP-7010, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7010;CLS:PRINTER;"
+  PCFileName "br7010.ppd"
+}
+
+{
   ModelName "DCP-7020"
   Attribute "NickName" "" "Brother DCP-7020, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7020;CLS:PRINTER;"
@@ -189,6 +196,14 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
 }
 
 {
+  ModelName "DCP-B7500D series"
+  Attribute "NickName" "" "Brother DCP-B7500D series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:DCP-B7500D series;CLS:PRINTER;CID:Brother Laser Type1;"
+  Duplex rotated
+  PCFileName "brb7500d.ppd"
+}
+
+{
   ModelName "DCP-L2500D series"
   Attribute "NickName" "" "Brother DCP-L2500D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-L2500D series;CLS:PRINTER;CID:Brother Laser Type1;"
@@ -242,6 +257,14 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:DCP-L2550DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
   PCFileName "brl2550d.ppd"
+}
+
+{
+  ModelName "DCP-L2560DW series"
+  Attribute "NickName" "" "Brother DCP-L2560DW series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:DCP-L2560DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS300-600,V1.3,DM1;"
+  Duplex rotated
+  PCFileName "brl2560d.ppd"
 }
 
 {
@@ -310,6 +333,13 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
 }
 
 {
+  ModelName "HL-2240 series"
+  Attribute "NickName" "" "Brother HL-2240 series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2240 series;CLS:PRINTER;CID:Brother Laser Type1;"
+  PCFileName "br2240.ppd"
+}
+
+{
   ModelName "HL-2240D series"
   Attribute "NickName" "" "Brother HL-2240D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2240D series;CLS:PRINTER;CID:Brother Laser Type1;"
@@ -330,6 +360,14 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   Attribute "NickName" "" "Brother HL-2260, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2260;CLS:PRINTER;CID:Brother Laser Type1;"
   PCFileName "br2260.ppd"
+}
+
+{
+  ModelName "HL-2260D"
+  Attribute "NickName" "" "Brother HL-2260D, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2260D;CLS:PRINTER;CID:Brother Laser Type1;"
+  Duplex rotated
+  PCFileName "br2260d.ppd"
 }
 
 {
@@ -361,6 +399,21 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   Attribute "NickName" "" "Brother HL-5040 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-5040 series;CLS:PRINTER;"
   PCFileName "br5040.ppd"
+}
+
+{
+  ModelName "HL-5140 series"
+  Attribute "NickName" "" "Brother HL-5140 series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-5140 series;CLS:PRINTER;"
+  PCFileName "br5140.ppd"
+}
+
+{
+  ModelName "HL-5450DN series"
+  Attribute "NickName" "" "Brother HL-5450DN series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-5450DN series;CLS:PRINTER;CID:Brother Laser Type2;URF:W8,CP1,IS11-19-4,MT1-3-4-5-8-11,OB10,PQ4,RS300-600-1200,DM1;"
+  Duplex normal
+  PCFileName "br5450d.ppd"
 }
 
 {
@@ -468,6 +521,30 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
 }
 
 {
+  ModelName "HL-L2400DW"
+  Attribute "NickName" "" "Brother HL-L2400DW, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2400DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
+  Duplex rotated
+  PCFileName "brl2400d.ppd"
+}
+
+{
+  ModelName "HL-L2402D"
+  Attribute "NickName" "" "Brother HL-L2402D, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-L2402D;CLS:PRINTER;CID:Brother Laser Type1;"
+  Duplex rotated
+  PCFileName "brl2402d.ppd"
+}
+
+{
+  ModelName "HL-L2405W"
+  Attribute "NickName" "" "Brother HL-L2405W, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2405W;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5;"
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
+  PCFileName "brl2405.ppd"
+}
+
+{
   ModelName "HL-L5000D series"
   Attribute "NickName" "" "Brother HL-L5000D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-L5000D series;CLS:PRINTER;CID:Brother Laser Type1;"
@@ -557,6 +634,13 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
 }
 
 {
+  ModelName "MFC-8440"
+  Attribute "NickName" "" "Brother MFC-8440, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:HBP,PJL,PCL,PCLXL;MDL:MFC-8440;CLS:PRINTER;"
+  PCFileName "br8440.ppd"
+}
+
+{
   ModelName "MFC-8710DW"
   Attribute "NickName" "" "Brother MFC-8710DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:MFC-8710DW;CLS:PRINTER;CID:Brother Laser Type2;URF:W8,CP1,IS11-19-4,MT1-3-4-5-8-11,OB10,PQ4,RS300-600-1200,DM1;"
@@ -577,6 +661,14 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   Attribute "NickName" "" "Brother MFC-9160, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:HBP,PCL;MDL:MFC-9160;CLS:PRINTER;"
   PCFileName "br9160.ppd"
+}
+
+{
+  ModelName "MFC-L2690DW"
+  Attribute "NickName" "" "Brother MFC-L2690DW, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:MFC-L2690DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
+  Duplex rotated
+  PCFileName "brl2690d.ppd"
 }
 
 {
@@ -624,7 +716,7 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   Attribute "NickName" "" "Fuji Xerox DocuPrint P265 dw, $USING"
   Attribute "1284DeviceID" "" "MFG:FX;CMD:PJL,PCL,PCLXL,URF;MDL:DocuPrint P265 dw;CLS:PRINTER;CID:FX Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS300-600,V1.3,DM1;"
   Duplex rotated
-  PCFileName "fxp265dd d.ppd"
+  PCFileName "fxp265d.ppd"
 }
 
 {
