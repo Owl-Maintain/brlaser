@@ -13,6 +13,7 @@ This driver has been reported to work with these printers:
 * Brother DCP-1510 series
 * Brother DCP-1600 series
 * Brother DCP-1610W series
+* Brother DCP-7010
 * Brother DCP-7020
 * Brother DCP-7030
 * Brother DCP-7040
@@ -23,6 +24,7 @@ This driver has been reported to work with these printers:
 * Brother DCP-7070DW
 * Brother DCP-7080
 * Brother DCP-8065DN
+* Brother DCP-B7500D series
 * Brother DCP-L2500D series
 * Brother DCP-L2510D series
 * Brother DCP-L2520D series
@@ -30,6 +32,7 @@ This driver has been reported to work with these printers:
 * Brother DCP-L2537DW
 * Brother DCP-L2540DW series
 * Brother DCP-L2550DW series
+* Brother DCP-L2560DW series
 * Brother FAX-2820
 * Brother FAX-2840
 * Brother HL-1110 series
@@ -39,14 +42,18 @@ This driver has been reported to work with these printers:
 * Brother HL-2140 series
 * Brother HL-2220 series
 * Brother HL-2230 series
+* Brother HL-2240 series
 * Brother HL-2240D series
 * Brother HL-2250DN series
 * Brother HL-2260
+* Brother HL-2260D
 * Brother HL-2270DW series
 * Brother HL-2280DW
 * Brother HL-5030 series
 * Brother HL-5040 series
+* Brother HL-5140 series
 * Brother HL-5370DW series
+* Brother HL-5450DN series
 * Brother HL-L2300D series
 * Brother HL-L2305 series
 * Brother HL-L2310D series
@@ -59,6 +66,9 @@ This driver has been reported to work with these printers:
 * Brother HL-L2375DW series
 * Brother HL-L2380DW series
 * Brother HL-L2390DW
+* Brother HL-L2400DW
+* Brother HL-L2402D
+* Brother HL-L2405W
 * Brother HL-L5000D series
 * Brother MFC-1810 series
 * Brother MFC-1910W
@@ -71,9 +81,11 @@ This driver has been reported to work with these printers:
 * Brother MFC-7440N
 * Brother MFC-7460DN
 * Brother MFC-7860DW
+* Brother MFC-8440
 * Brother MFC-8710DW
 * Brother MFC-8860DN
 * Brother MFC-9160
+* Brother MFC-L2690DW
 * Brother MFC-L2700DN series
 * Brother MFC-L2700DW series
 * Brother MFC-L2710DN series
