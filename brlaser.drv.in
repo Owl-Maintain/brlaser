@@ -428,7 +428,7 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   ModelName "HL-5450DN series"
   Attribute "NickName" "" "Brother HL-5450DN series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-5450DN series;CLS:PRINTER;CID:Brother Laser Type2;URF:W8,CP1,IS11-19-4,MT1-3-4-5-8-11,OB10,PQ4,RS300-600-1200,DM1;"
-  Duplex normal
+  Duplex rotated
   PCFileName "br5450d.ppd"
 }
 
@@ -437,7 +437,7 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   Attribute "NickName" "" "Brother HL-5370DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-5370DW series;CLS:PRINTER;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
-  Duplex normal
+  Duplex rotated
   PCFileName "br5370d.ppd"
 }
 
