@@ -1,0 +1,14 @@
+name: release
+run-name: ${{ github.actor }} is publishing release ${{ github.ref_name }}
+on:
+  release:
+    types: [published]
+jobs:
+  sha256:
+    name: sha256
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tarball url
+        run: echo "${{ github.server_url }}/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.tar.gz"
+      - name: Create tarball sha256
+        run: curl -sL "${{ github.server_url }}/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.tar.gz" | shasum -a 256 | cut -d " " -f 1
