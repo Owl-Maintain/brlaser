@@ -1,3 +1,31 @@
+brlaser v6.2.7 (2025-01-20)
+    New printer entries:
+        Brother DCP-7010
+        Brother DCP-B7500D series
+        Brother DCP-L2560DW series
+        Brother HL-2240 series
+        Brother HL-2260D
+        Brother HL-5140 series
+        Brother HL-5370DW series
+        Brother HL-5450DN series
+        Brother HL-L2402D
+        Brother MFC-8440
+        Brother MFC-L2690DW
+        Brother HL-L2400DW
+        Brother HL-L2405W
+
+    Added printer entries for "Test Drivers".
+
+    Code Changes:
+        Correct PCFileName for DocuPrint P265 dw
+        Replaced `Duplex normal` with `Duplex rotated`
+        Both Duplex & Tumble use PLC `&l2S`
+
+    Issues Resolved:
+        Incorrect Duplex & Tumble Check Statement
+        Duplex long-edge actually prints duplex short-edge
+        All reverse sides are unreadable with artefactsbug (duplex long-edge)
+
 brlaser v6.2.6 (2023-08-02)
     New printer entries:
         Brother FAX-2840
