@@ -33,9 +33,22 @@ brlaser v6.2 (2022-12-25)
         Explicitly disable duplex; Thanks @tomjnixon
 
     New printer entries:
-        Brother DCP-7020
         Brother DCP-7070DW
         Brother DCP-8065DN
+        Brother HL-L2370DN
+        Brother HL-L5000D
+
+    Code Changes:
+        Corrected MFC-7460DN PPD file name br7365dn.ppd > br7460dn.ppd.
+        Explicitly disable duplex in PCL \033&l0S.
+
+    Issues Resolved:
+        MFC-7365DN & MFC-7460DN used the same PCFileName.
+        HL-L2350DW continued to duplex even when disabled, but every other page was garbled.
+
+brlaser v6.1 (2022-01-14)
+    New printer entries:
+        Brother DCP-7020
         Brother DCP-L2510D
         Brother DCP-L2537DW
         Brother DCP-L2550DW
@@ -48,9 +61,7 @@ brlaser v6.2 (2022-12-25)
         Brother HL-L2305
         Brother HL-L2310D
         Brother HL-L2350DW
-        Brother HL-L2370DN
         Brother HL-L2380DW
-        Brother HL-L5000D
         Brother MFC-1810
         Brother MFC-7320
         Brother MFC-7340
@@ -64,14 +75,6 @@ brlaser v6.2 (2022-12-25)
         Brother MFC-L3750CDW
         Lenovo LJ2650DN
         Fuji Xerox DocuPrint P265 dw
-
-    Code Changes:
-        Corrected MFC-7460DN PPD file name br7365dn.ppd > br7460dn.ppd.
-        Explicitly disable duplex in PCL \033&l0S.
-
-    Issues Resolved:
-        MFC-7365DN & MFC-7460DN used the same PCFileName.
-        HL-L2350DW continued to duplex even when disabled, but every other page was garbled.
 
 brlaser v6 (2019-09-22)
     Added support for some more Brother HL-series printers. These printers
