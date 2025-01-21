@@ -3,12 +3,25 @@ run-name: ${{ github.actor }} is publishing release ${{ github.ref_name }}
 on:
   release:
     types: [published]
+  workflow_dispatch:
 jobs:
   sha256:
     name: sha256
     runs-on: ubuntu-latest
     steps:
-      - name: Tarball url
-        run: echo "${{ github.server_url }}/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.tar.gz"
-      - name: Create tarball sha256
-        run: curl -sL "${{ github.server_url }}/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.tar.gz" | shasum -a 256 | cut -d " " -f 1
+    - name: Zip url
+      run: echo "${{ github.server_url }}/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.zip"
+    - name: Tarball url
+      run: echo "${{ github.server_url }}/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.tar.gz"
+    - name: Create Source Code Checksums
+      run: |
+          curl -sL "${{ github.server_url }}/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.zip"    | shasum -a 256 | cut -d " " -f 1 >> "${{ github.ref_name }}.zip.sha256"
+          curl -sL "${{ github.server_url }}/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.tar.gz" | shasum -a 256 | cut -d " " -f 1 >> "${{ github.ref_name }}.tar.gz.sha256"
+    - name: Upload Source Code Checksums
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ github.ref_name }}*
+        file_glob: true
+        tag: ${{ github.ref }}
+        overwrite: false
