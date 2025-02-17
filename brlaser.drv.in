@@ -335,6 +335,13 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
 }
 
 {
+  ModelName "HL-2150N"
+  Attribute "NickName" "" "Brother HL-2150N, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2150N;CLS:PRINTER;"
+  PCFileName "br2150.ppd"
+}
+
+{
   ModelName "HL-2220 series"
   Attribute "NickName" "" "Brother HL-2220 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2220 series;CLS:PRINTER;"

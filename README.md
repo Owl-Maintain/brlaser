@@ -43,6 +43,7 @@ The following printers have been reported to work with this driver:
 * Brother HL-2030 series
 * Brother HL-2130 series
 * Brother HL-2140 series
+* Brother HL-2150N
 * Brother HL-2220 series
 * Brother HL-2230 series
 * Brother HL-2240 series
