@@ -11,7 +11,9 @@ assignees: ''
 TO MAKE YOUR REPORT MORE HELPFUL, PLEASE FILL IN THIS TEMPLATE
 -->
 
-**Printer Entry**: <!-- sudo lpinfo --include-schemes usb -l -v -->
+**Printer Entry**:
+<!-- sudo lpinfo --include-schemes usb -l -v -->
+<!-- /usr/lib/cups/backend/snmp IP_ADDRESS_HERE -->
 ````
 INSERT TERMINAL OUTPUT HERE
 ````
@@ -21,8 +23,8 @@ INSERT TERMINAL OUTPUT HERE
 - [ ] tested 300dpi
 - [ ] tested 600dpi
 - [ ] tested 1200dpi
-- [ ] texted simplex <!-- single-sided printing -->
+- [ ] tested simplex <!-- single-sided printing -->
 - [ ] tested duplex  <!-- if applicable -->
 
 **Additional notes**:
-Add any notes such as unexpected behavior, or possible issues.
+<!-- Add any notes such as unexpected behavior, or possible issues. -->
