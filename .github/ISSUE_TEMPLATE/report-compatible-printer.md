@@ -21,7 +21,7 @@ INSERT TERMINAL OUTPUT HERE
 - [ ] tested 300dpi
 - [ ] tested 600dpi
 - [ ] tested 1200dpi
-- [ ] texted simplex <!-- single-sided printing -->
+- [ ] tested simplex <!-- single-sided printing -->
 - [ ] tested duplex  <!-- if applicable -->
 
 **Additional notes**:
