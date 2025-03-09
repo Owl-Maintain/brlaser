@@ -10,6 +10,8 @@ The software is released under the GNU General Public License, which grants the 
 
 Supported Printers
 ------------------
+This driver only supports Monochrome Laser Printers, any other printer types (e.g. Color Laser or InkJet) will not work with this driver.
+
 The following printers have been reported to work with this driver:
 
 * Brother DCP-1510 series
@@ -98,13 +100,16 @@ The following printers have been reported to work with this driver:
 * Fuji Xerox DocuPrint P265 dw
 * Lenovo LJ2650DN
 
+**Note**:
+Some operating systems may not immediately update the driver they provide. This can cause supported printers to be missing from your system, or fixed bugs/issues to still be present on your installation.
+
 
 Installation
 ------------
 
-Some operating systems already ship this driver. This is the case for at least Debian, Gentoo, Ubuntu, Raspbian, openSUSE, NixOS, Arch Linux, Guix and Fedora.
+Most Linux and BSD operating systems already ship this driver. This is the case for at least Debian, Ubuntu, Raspbian, Fedora, openSUSE, Arch Linux, Gentoo, NixOS and Guix.
 
-Look for a package named ``printer-driver-brlaser``.
+Look for a package named ``printer-driver-brlaser`` or ``brother-brlaser``.
 
 You'll also need ``Ghostscript``, in case that's not installed automatically.
 
@@ -114,25 +119,39 @@ Once brlaser is installed, you can add your printer using the usual CUPS interfa
 Testing Other Printers
 ----------------------
 
-If your printer is not officially supported, you can try selecting any driver marked as ``brlaser`` to test if the driver will work for your printer.
+If your printer is not officially supported, please select either the ``Owl-Maintain/brlaser Test Driver`` or the ``Owl-Maintain/brlaser Test Driver Duplex`` to test if the driver works with your printer.
 
-If you are able to successfully print, please open a new issue on Github and select "Report Compatible Printer".
+If you are able to successfully print, please submit a compatibility report by opening a new issue on GitHub and selecting "**Report Compatible Printer**".
 
-When submitting the compatibility report, connect your printer to your computer via USB and run the following command:
+Next, with your printer powered on, connect it to your computer via _USB_ or obtain your printer's _IP address_.
 
-``sudo lpinfo --include-schemes usb -l -v``
+**For USB-connected printers:**
+- Run the following command:
+
+   ``sudo lpinfo --include-schemes usb -l -v``
+
+- Example of output:
+   ```
+   Device: uri = usb://Brother/HL-2270DW%20series?serial=000000000000
+           class = direct
+           info = Brother HL-2270DW series
+           make-and-model = Brother HL-2270DW series
+           device-id = MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2270DW series;CLS:PRINTER;CID:Brother Laser Type1;
+           location =
+   ```
+
+**For network printers:**
+- Run the following command:
+
+   ``/usr/lib/cups/backend/snmp IP_ADDRESS_HERE``
+
+- Example of output:
+   ```
+   INFO: Using default SNMP Community public
+   network lpd://HL-2270DW-LAN/BINARY_P1 "Brother HL-2270DW series" "Brother HL-2270DW series" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2270DW series;CLS:PRINTER;CID:Brother Laser Type1;" ""
+   ```
 
 Please provide the output of the command so that we can add the proper entry for your specific printer model in the driver.
-
-Example of output:
-````
-Device: uri = usb://Brother/HL-2270DW%20series?serial=000000000000
-        class = direct
-        info = Brother HL-2270DW series
-        make-and-model = Brother HL-2270DW series
-        device-id = MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2270DW series;CLS:PRINTER;CID:Brother Laser Type1;
-        location = 
-````
 
 
 Building from source
@@ -140,7 +159,7 @@ Building from source
 
 To compile brlaser from source, you will need to have CMake and the CUPS development packages (such as cups-devel, libcups2-dev, or libcupsimage2-dev) installed on your system.
 
-You can get the source code by cloning the Git repository or downloading the [latest release](https://github.com/pdewacht/brlaser/releases/latest).
+You can get the source code by cloning the Git repository or downloading the [latest release](https://github.com/Owl-Maintain/brlaser/releases/latest).
 
 To compile and install the driver, use the following commands:
 
