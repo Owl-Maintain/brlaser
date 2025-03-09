@@ -114,25 +114,39 @@ Once brlaser is installed, you can add your printer using the usual CUPS interfa
 Testing Other Printers
 ----------------------
 
-If your printer is not officially supported, you can try selecting any driver marked as ``brlaser`` to test if the driver will work for your printer.
+If your printer is not officially supported, please select either the ``Owl-Maintain/brlaser Test Driver`` or the ``Owl-Maintain/brlaser Test Driver Duplex`` to test if the driver works with your printer.
 
-If you are able to successfully print, please open a new issue on Github and select "Report Compatible Printer".
+If you are able to successfully print, please submit a compatibility report by opening a new issue on GitHub and selecting "**Report Compatible Printer**".
 
-When submitting the compatibility report, connect your printer to your computer via USB and run the following command:
+Next, with your printer powered on, connect it to your computer via _USB_ or obtain your printer's _IP address_.
 
-``sudo lpinfo --include-schemes usb -l -v``
+**For USB-connected printers:**
+- Run the following command:
+  
+   ``sudo lpinfo --include-schemes usb -l -v``
+  
+- Example of output:
+   ```
+   Device: uri = usb://Brother/HL-2270DW%20series?serial=000000000000
+           class = direct
+           info = Brother HL-2270DW series
+           make-and-model = Brother HL-2270DW series
+           device-id = MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2270DW series;CLS:PRINTER;CID:Brother Laser Type1;
+           location =
+   ```
+
+**For network printers:**
+- Run the following command:
+  
+   ``/usr/lib/cups/backend/snmp IP_ADDRESS_HERE``
+
+- Example of output:
+   ```
+   INFO: Using default SNMP Community public
+   network lpd://HL-2270DW-LAN/BINARY_P1 "Brother HL-2270DW series" "Brother HL-2270DW series" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2270DW series;CLS:PRINTER;CID:Brother Laser Type1;" ""
+   ```
 
 Please provide the output of the command so that we can add the proper entry for your specific printer model in the driver.
-
-Example of output:
-````
-Device: uri = usb://Brother/HL-2270DW%20series?serial=000000000000
-        class = direct
-        info = Brother HL-2270DW series
-        make-and-model = Brother HL-2270DW series
-        device-id = MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2270DW series;CLS:PRINTER;CID:Brother Laser Type1;
-        location = 
-````
 
 
 Building from source
