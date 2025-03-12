@@ -154,7 +154,7 @@ Building from source
 
 To compile brlaser from source, you will need to have CMake and the CUPS development packages (such as cups-devel, libcups2-dev, or libcupsimage2-dev) installed on your system.
 
-You can get the source code by cloning the Git repository or downloading the [latest release](https://github.com/pdewacht/brlaser/releases/latest).
+You can get the source code by cloning the Git repository or downloading the [latest release](https://github.com/Owl-Maintain/brlaser/releases/latest).
 
 To compile and install the driver, use the following commands:
 
