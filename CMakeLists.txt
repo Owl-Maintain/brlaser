@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.10)
 project(Owl-Maintain/brlaser CXX)
 set(BRLASER_VERSION "6.2.7")
 
