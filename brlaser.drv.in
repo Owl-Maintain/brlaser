@@ -38,8 +38,15 @@ Filter application/vnd.cups-raster 33 rastertobrlaser
 // The 300dpi mode is reportedly not supported on all printers, so
 // it's listed in individual printer blocks where we believe it works.
 // Resolution k 1 0 0 0 "300dpi/300 DPI"
-*Resolution k 1 0 0 0 "600dpi/600 DPI"
-Resolution k 1 0 0 0 "1200dpi/1200HQ"
+// *Resolution k 1 0 0 0 "600dpi/600 DPI"
+// Resolution k 1 0 0 0 "1200dpi/1200 DPI"
+
+Option Resolution PickOne AnySetup 10
+  // Choice "300dpi/300 DPI" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+  *Choice "600dpi/600 DPI" "<</HWResolution[600 600]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+  Choice "1200dpi/1200 DPI" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+  Choice "1200x600dpi/HD1200A" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 2>>setpagedevice"
+  Choice "2400x600dpi/HD1200B" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 1>>setpagedevice"
 
 // Supported page sizes.
 HWMargins 8 8 8 16

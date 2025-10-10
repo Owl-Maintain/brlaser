@@ -26,6 +26,8 @@
 struct page_params {
   int num_copies;
   int resolution;
+  int page_speed;
+  bool ras1200;
   bool duplex;
   bool tumble;
   bool economode;
@@ -37,6 +39,8 @@ struct page_params {
   bool operator==(const page_params &o) const {
     return num_copies == o.num_copies
       && resolution == o.resolution
+      && page_speed == o.page_speed
+      && ras1200 == o.ras1200
       && duplex == o.duplex
       && tumble == o.tumble
       && economode == o.economode
