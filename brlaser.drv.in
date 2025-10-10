@@ -41,6 +41,13 @@ Filter application/vnd.cups-raster 33 rastertobrlaser
 *Resolution k 1 0 0 0 "600dpi/600 DPI"
 Resolution k 1 0 0 0 "1200dpi/1200HQ"
 
+// Option Resolution PickOne AnySetup 10
+//   Choice "300dpi/300 DPI" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+//   Choice "600dpi/600 DPI" "<</HWResolution[600 600]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+//   Choice "1200dpi/1200HQ" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+//   Choice "1200x600dpi/HD1200A" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 2>>setpagedevice"
+//   Choice "2400x600dpi/HD1200B" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 1>>setpagedevice"
+
 // Supported page sizes.
 HWMargins 8 8 8 16
 *MediaSize A4
@@ -97,7 +104,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "Test Driver"
   Attribute "NickName" "" "Brother A @CMAKE_PROJECT_NAME@ Test Driver, v@BRLASER_VERSION@; compatible with monochrome laser printers"
   Attribute "1284DeviceID" "" "MFG:Brother;MDL:brlaser Test Driver;CLS:PRINTER;"
-  Resolution k 1 0 0 0 "300dpi/300 DPI"
+
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "1200x600dpi/HD1200A" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 2>>setpagedevice"
+    Choice "2400x600dpi/HD1200B" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 1>>setpagedevice"
+
   PCFileName "br0000.ppd"
 }
 
@@ -105,7 +117,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "Test Driver Duplex"
   Attribute "NickName" "" "Brother A @CMAKE_PROJECT_NAME@ Test Driver Duplex, v@BRLASER_VERSION@; compatible with duplex monochrome laser printers"
   Attribute "1284DeviceID" "" "MFG:Brother;MDL:brlaser Test Driver Duplex;CLS:PRINTER;"
-  Resolution k 1 0 0 0 "300dpi/300 DPI"
+
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "1200x600dpi/HD1200A"  "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 2>>setpagedevice"
+    Choice "1200x2400dpi/HD1200B" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 1>>setpagedevice"
+
   Duplex rotated
   PCFileName "br0000d.ppd"
 }
