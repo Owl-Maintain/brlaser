@@ -433,6 +433,7 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   ModelName "HL-5250DN series"
   Attribute "NickName" "" "Brother HL-5250DN series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,POSTSCRIPT;MDL:HL-5250DN series;CLS:PRINTER;"
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
   PCFileName "br5250d.ppd"
 }
@@ -642,6 +643,7 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   ModelName "HL-L2480DW"
   Attribute "NickName" "" "Brother HL-L2480DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-L2480DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
   PCFileName "brl2480d.ppd"
 }
@@ -754,6 +756,7 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   ModelName "MFC-8860DN"
   Attribute "NickName" "" "Brother MFC-8860DN, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,POSTSCRIPT;MDL:MFC-8860DN;CLS:PRINTER;"
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
   PCFileName "br8860d.ppd"
 }
@@ -833,6 +836,7 @@ Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   ModelName "MFC-L2800DW"
   Attribute "NickName" "" "Brother MFC-L2800DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:MFC-L2800DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
   PCFileName "brl2800d.ppd"
 }
