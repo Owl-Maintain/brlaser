@@ -34,6 +34,7 @@ The following printers have been reported to work with this driver:
 * Brother DCP-L2510D series
 * Brother DCP-L2520D series
 * Brother DCP-L2520DW series
+* Brother DCP-L2530DW series
 * Brother DCP-L2537DW
 * Brother DCP-L2540DW series
 * Brother DCP-L2550DW series
