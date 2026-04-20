@@ -284,6 +284,14 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
 }
 
 {
+  ModelName "DCP-L2530DW series"
+  Attribute "NickName" "" "Brother DCP-L2530DW series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:DCP-L2530DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
+  Duplex rotated
+  PCFileName "brl2530d.ppd"
+}
+
+{
   ModelName "DCP-L2537DW"
   Attribute "NickName" "" "Brother DCP-L2537DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:DCP-L2537DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
