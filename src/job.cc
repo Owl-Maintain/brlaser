@@ -58,7 +58,8 @@ void job::write_page_header() {
   fprintf(out_, "\033%%-12345X@PJL\n");
   if (page_params_.ras1200) {
     fprintf(out_, "@PJL SET RAS1200MODE = TRUE\n");
-    fprintf(out_, "@PJL SET RESOLUTION = 600\n");
+    fprintf(out_, "@PJL SET RESOLUTION = 1200\n");
+    fprintf(out_, "@PJL SET PAPERFEEDSPEED = HALF\n");
   } else {
     fprintf(out_, "@PJL SET RAS1200MODE = FALSE\n");
     fprintf(out_, "@PJL SET RESOLUTION = %d\n",
