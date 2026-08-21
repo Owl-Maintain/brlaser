@@ -676,6 +676,7 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2440DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2440DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
   Duplex rotated
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
   PCFileName "brl2440d.ppd"
 }
 
