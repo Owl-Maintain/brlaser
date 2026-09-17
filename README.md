@@ -205,3 +205,28 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with brlaser.  If not, see <http://www.gnu.org/licenses/>.
+
+## Brother HL-L2300D family profile
+
+Thirty-seven models use the same filter in the Brother driver, rastertobrother2300. The list includes the HL-L2300D, HL-L2320D, HL-L2340D, HL-L2360D, HL-L2380DW, DCP-L25xx, MFC-L27xx, DCP-7080 and HL-2260. See `brlaser.drv.in` for the full list. The PPD of each of these models has the attribute `*brlaserProfile: "brother-hbp"`. When the filter finds this attribute, it sends the same data as the Brother driver:
+
+* The Brother media type keywords: `REGULAR`, `THICK2`, `ENVELOPES`, `ENVTHICK`, `ENVTHIN`, `RECYCLED`, `LABEL` and `POSTCARD`.
+* The PCL paper source commands for auto select and for the manual feed slot.
+* A 300 dpi draft mode.
+* Duplex commands for long edge and short edge, with no page rotation.
+* The Brother HQ1200 raster mode. This is PCL raster mode 1032. Each row has 1200 x 1200 dpi data in 16-bit units. The resolution choice is "HQ1200 (Brother mode)".
+* The "Improve output" option (reduce paper curl, improve toner fixing), a sleep timer and a "Skip blank pages" option.
+* The paper sizes A5 long edge, Folio, 3 x 5 in, #10 envelope and ISO B5.
+* The job name and the user name in PJL. The printer shows them in its job log.
+* Printer status during a job. The filter reads the PJL back channel between raster bands. The queue shows paper out, paper jam, cover open and the manual feed prompt.
+
+The profile applies only to the models that have the attribute. Other models are not changed. To use the profile with another model that uses rastertobrother2300, add the same `Attribute` line to the block of that model in `brlaser.drv.in`.
+
+## Halftone choices
+
+The `Halftone` option asks CUPS for 8-bit grey data and does the halftone in the filter. The result is the same on each platform. The choices are error diffusion, clustered dot, threshold, and the Brother "Graphics" and "Text" screens. The Brother screens are tables that were measured from the output of the Brother driver: 256 grey levels, a period of 32 rows and a period of 4 bytes. No data was copied from the Brother files. The default choice uses the 1-bit data from CUPS.
+
+## Supply levels and status (commandtobrlaser)
+
+The filter `commandtobrlaser` does the CUPS `ReportLevels` and `PrintSelfTestPage` commands through the PJL back channel. The HL-L2300D family does not report a toner or drum percentage over PJL. Each supplies query gets the answer `?`. The filter makes an estimate from the page counter of the printer and a baseline. The baseline is recorded when the printer reports "Replace Toner" or "Replace Drum" and then reports Ready. The baseline file is `/var/lib/brlaser/supplies.conf` (on macOS, `/Library/Application Support/brlaser`). The CUPS user must have write permission for this directory. The environment variable `BRLASER_STATE_DIR` sets a different directory. Estimated levels have the label "(estimated)".
+Do not send `@PJL INFO BRLIFE` to an HL-L2300D. The USB interface of the printer stops until the next job.

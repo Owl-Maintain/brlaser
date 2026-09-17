@@ -28,10 +28,19 @@ struct page_params {
   int resolution;
   int page_speed;
   bool ras1200;
+  bool hq1200;          // Brother mode 1032 (HL-L2300D family HQ1200)
   bool duplex;
   bool tumble;
   bool economode;
   int density_adjust;
+  int vendor_profile;   // 0 = generic brlaser, 1 = Brother HBP (HL-L2300D family)
+  int improve_output;   // 0 = off, 1 = less paper curl, 2 = improve toner fixing
+  int sleep_minutes;    // 0 = printer default
+  bool skip_blank;
+  bool live_status;     // poll PJL unsolicited status while printing (profile)
+  std::string user;
+  std::string title;
+  int media_position;
   std::string sourcetray;
   std::string mediatype;
   std::string papersize;
@@ -41,10 +50,17 @@ struct page_params {
       && resolution == o.resolution
       && page_speed == o.page_speed
       && ras1200 == o.ras1200
+      && hq1200 == o.hq1200
       && duplex == o.duplex
       && tumble == o.tumble
       && economode == o.economode
       && density_adjust == o.density_adjust
+      && vendor_profile == o.vendor_profile
+      && improve_output == o.improve_output
+      && sleep_minutes == o.sleep_minutes
+      && skip_blank == o.skip_blank
+      && live_status == o.live_status
+      && media_position == o.media_position
       && sourcetray == o.sourcetray
       && mediatype == o.mediatype
       && papersize == o.papersize;
@@ -58,7 +74,8 @@ class job {
   explicit job(FILE *out, const std::string &job_name);
   ~job();
 
-  void encode_page(const page_params &params,
+  // Returns false when the page was skipped (blank-page skipping).
+  bool encode_page(const page_params &params,
                    int lines,
                    int linesize,
                    nextline_fn nextline);
@@ -76,6 +93,9 @@ class job {
   std::string job_name_;
   page_params page_params_;
   int pages_;
+  bool live_status_;
+  std::string user_, title_;
+  class pjl_status *status_;
 };
 
 #endif  // JOB_H

@@ -191,3 +191,90 @@ vector<uint8_t> encode_line(const vector<uint8_t> &line) {
   write_substitute(0, line.begin(), line.end(), &buf);
   return buf;
 }
+
+
+// ---- 16-bit unit variant (Brother mode 1032) ----
+namespace {
+
+void write_substitute16(int offset,
+                        std::vector<uint16_t>::const_iterator first,
+                        std::vector<uint16_t>::const_iterator last,
+                        vector<uint8_t> *out) {
+  const int offset_max = 15;
+  const int count_max = 7;
+  int count = std::distance(first, last) - 1;
+  int offset_low = std::min(offset, offset_max);
+  int count_low = std::min(count, count_max);
+  out->push_back((offset_low << 3) | count_low);
+  write_overflow(offset - offset_max, out);
+  write_overflow(count - count_max, out);
+  for (; first != last; ++first) {
+    out->push_back(*first >> 8);
+    out->push_back(*first & 0xff);
+  }
+}
+
+void write_repeat16(int offset, int count, uint16_t value, vector<uint8_t> *out) {
+  const int offset_max = 3;
+  const int count_max = 31;
+  count -= 2;
+  int offset_low = std::min(offset, offset_max);
+  int count_low = std::min(count, count_max);
+  out->push_back(128 | (offset_low << 5) | count_low);
+  write_overflow(offset - offset_max, out);
+  write_overflow(count - count_max, out);
+  out->push_back(value >> 8);
+  out->push_back(value & 0xff);
+}
+
+}  // namespace
+
+vector<uint8_t> encode_line16(const vector<uint16_t> &line,
+                              const vector<uint16_t> &reference) {
+  assert(line.size() == reference.size());
+  if (std::none_of(line.begin(), line.end(), [](uint16_t b) { return b; })) {
+    return vector<uint8_t>(1, 0xFF);
+  }
+  vector<uint8_t> output;
+  output.reserve(line.size() * 2 + 16);
+  output.push_back(0);
+  const uint8_t max_edits = 254;
+  int num_edits = 0;
+  auto line_it = line.begin();
+  auto line_end_it =
+    std::mismatch(line.rbegin(), line.rend(), reference.rbegin()).first.base();
+  auto ref_it = reference.begin();
+  while (1) {
+    int offset = skip_to_next_mismatch(&line_it, line_end_it, &ref_it);
+    if (line_it == line_end_it) break;
+    if (++num_edits == max_edits) {
+      write_substitute16(offset, line_it, line_end_it, &output);
+      break;
+    }
+    int s = substitute_length(line_it, line_end_it, ref_it);
+    if (s > 0) {
+      write_substitute16(offset, line_it, std::next(line_it, s), &output);
+      line_it += s;
+      ref_it += s;
+    } else {
+      int r = repeat_length(line_it, line_end_it);
+      assert(r >= 2);
+      write_repeat16(offset, r, *line_it, &output);
+      line_it += r;
+      ref_it += r;
+    }
+  }
+  output[0] = num_edits;
+  return output;
+}
+
+vector<uint8_t> encode_line16(const vector<uint16_t> &line) {
+  if (std::none_of(line.begin(), line.end(), [](uint16_t b) { return b; })) {
+    return vector<uint8_t>(1, 0xFF);
+  }
+  vector<uint8_t> buf;
+  buf.reserve(line.size() * 2 + 16);
+  buf.push_back(1);
+  write_substitute16(0, line.begin(), line.end(), &buf);
+  return buf;
+}
