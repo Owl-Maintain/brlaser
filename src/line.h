@@ -28,4 +28,10 @@ std::vector<uint8_t> encode_line(
 std::vector<uint8_t> encode_line(
     const std::vector<uint8_t> &line);
 
+// Brother raster mode 1032 (HQ1200): same command set, but every offset,
+// count and value is in 16-bit big-endian units instead of bytes.
+std::vector<uint8_t> encode_line16(const std::vector<uint16_t> &line,
+                                   const std::vector<uint16_t> &reference);
+std::vector<uint8_t> encode_line16(const std::vector<uint16_t> &line);
+
 #endif  // LINE_H
