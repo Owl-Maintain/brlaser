@@ -62,13 +62,9 @@ MediaSize Executive
 MediaSize Legal
 MediaSize Letter
 
-// Input trays. Numbers must match the filter source code.
-*InputSlot 0 "Auto/Auto-select"
-InputSlot 1 "Tray1/Tray 1"
-InputSlot 2 "Tray2/Tray 2"
-InputSlot 3 "Tray3/Tray 3"
-InputSlot 4 "MPTray/MP Tray"
-InputSlot 5 "Manual/Manual"
+// Input trays are declared per printer block (see below) so that each
+// model lists only the sources it has.  Numbers must match the filter
+// source code: 0 auto, 1-3 trays, 4 MP tray, 5 manual feed.
 
 // Media types.
 *MediaType 0 "PLAIN/Plain paper"
@@ -80,6 +76,40 @@ MediaType 5 "TRANS/Transparencies"
 MediaType 6 "ENV/Envelopes"
 MediaType 7 "ENV-THICK/Thick envelopes"
 MediaType 8 "ENV-THIN/Thin envelopes"
+MediaType 9 "RECYCLED/Recycled paper"
+MediaType 10 "LABEL/Labels"
+MediaType 11 "POSTCARD/Postcard"
+
+// Halftoning.  Default: CUPS delivers 1-bit already-dithered data.  The
+// other choices ask CUPS for 8-bit grey and dither inside the filter,
+// which gives the same result on every platform.  Applied after Resolution
+// (order 20) so it can override cupsBitsPerColor.
+Option "brlaserHalftone/Halftone" PickOne AnySetup 20
+  *Choice "CUPS/System default" "<</cupsInteger8 0>>setpagedevice"
+  Choice "Diffusion/Error diffusion (photos)" "<</cupsBitsPerColor 8/cupsBitsPerPixel 8/cupsInteger8 1>>setpagedevice"
+  Choice "Cluster/Clustered dot (graphics)" "<</cupsBitsPerColor 8/cupsBitsPerPixel 8/cupsInteger8 2>>setpagedevice"
+  Choice "Threshold/Threshold (text and line art)" "<</cupsBitsPerColor 8/cupsBitsPerPixel 8/cupsInteger8 3>>setpagedevice"
+  Choice "BrotherGraphics/Brother screen (graphics)" "<</cupsBitsPerColor 8/cupsBitsPerPixel 8/cupsInteger8 4>>setpagedevice"
+  Choice "BrotherText/Brother screen (text)" "<</cupsBitsPerColor 8/cupsBitsPerPixel 8/cupsInteger8 5>>setpagedevice"
+
+Option "brlaserSkipBlank/Skip blank pages" Boolean AnySetup 10
+  *Choice False/Off "<</cupsInteger9 0>>setpagedevice"
+  Choice True/On "<</cupsInteger9 1>>setpagedevice"
+
+Option "brlaserImproveOutput/Improve output" PickOne AnySetup 10
+  *Choice "Off/Off" "<</cupsInteger14 0>>setpagedevice"
+  Choice "LessCurl/Reduce paper curl" "<</cupsInteger14 1>>setpagedevice"
+  Choice "FixToner/Improve toner fixing" "<</cupsInteger14 2>>setpagedevice"
+
+Option "brlaserSleepTime/Sleep time" PickOne AnySetup 10
+  *Choice "Default/Printer default" "<</cupsInteger15 0>>setpagedevice"
+  Choice "1/1 minute" "<</cupsInteger15 1>>setpagedevice"
+  Choice "2/2 minutes" "<</cupsInteger15 2>>setpagedevice"
+  Choice "5/5 minutes" "<</cupsInteger15 5>>setpagedevice"
+  Choice "10/10 minutes" "<</cupsInteger15 10>>setpagedevice"
+  Choice "15/15 minutes" "<</cupsInteger15 15>>setpagedevice"
+  Choice "30/30 minutes" "<</cupsInteger15 30>>setpagedevice"
+  Choice "60/60 minutes" "<</cupsInteger15 60>>setpagedevice"
 
 Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
   *Choice False/Off "<</cupsInteger10 0>>setpagedevice"
@@ -110,6 +140,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
     Choice "1200dpi/1200 DPI" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
     Choice "2400x600dpi/HQ1200 (2400x600dpi)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 1>>setpagedevice"
 
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br0000.ppd"
 }
 
@@ -124,6 +160,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
     Choice "2400x600dpi/HQ1200 (2400x600dpi)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 1>>setpagedevice"
 
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br0000d.ppd"
 }
 
@@ -132,6 +174,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-1510 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,XL2HB;MDL:DCP-1510 series;CLS:PRINTER;CID:Brother Laser Type1;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br1510.ppd"
 }
 
@@ -139,6 +187,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-1600 series"
   Attribute "NickName" "" "Brother DCP-1600 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,XL2HB;MDL:DCP-1600 series;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br1600.ppd"
 }
 
@@ -146,6 +200,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-1610W series"
   Attribute "NickName" "" "Brother DCP-1610W series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-1610W series;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br1610.ppd"
 }
 
@@ -153,6 +213,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-7010"
   Attribute "NickName" "" "Brother DCP-7010, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7010;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7010.ppd"
 }
 
@@ -161,6 +227,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-7020, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7020;CLS:PRINTER;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7020.ppd"
 }
 
@@ -169,6 +241,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-7030, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7030;CLS:PRINTER;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7030.ppd"
 }
 
@@ -177,6 +255,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-7040, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7040;CLS:PRINTER;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7040.ppd"
 }
 
@@ -185,6 +269,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-7055, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7055;CLS:PRINTER;CID:Brother Laser Type1;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7055.ppd"
 }
 
@@ -193,6 +283,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-7055W, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7055W;CLS:PRINTER;CID:Brother Laser Type1;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7055w.ppd"
 }
 
@@ -201,6 +297,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-7060D, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7060D;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7060d.ppd"
 }
 
@@ -209,6 +311,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-7065DN, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7065DN;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7065d.ppd"
 }
 
@@ -217,6 +325,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-7070DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:DCP-7070DW;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7070d.ppd"
 }
 
@@ -224,6 +338,24 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-7080"
   Attribute "NickName" "" "Brother DCP-7080, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7080;CLS:PRINTER;CID:Brother Laser Type1;"
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "br7080.ppd"
 }
 
@@ -231,7 +363,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-7080D"
   Attribute "NickName" "" "Brother DCP-7080D, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-7080D;CLS:PRINTER;CID:Brother Laser Type1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "br7080d.ppd"
 }
 
@@ -240,6 +390,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-8065DN, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:DCP-8065DN;CLS:PRINTER;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br8065d.ppd"
 }
 
@@ -248,6 +404,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-B7500D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:DCP-B7500D series;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brb7500d.ppd"
 }
 
@@ -255,7 +417,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-L2500D series"
   Attribute "NickName" "" "Brother DCP-L2500D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-L2500D series;CLS:PRINTER;CID:Brother Laser Type1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2500d.ppd"
 }
 
@@ -264,6 +444,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-L2510D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-L2510D series;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2510d.ppd"
 }
 
@@ -271,7 +457,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-L2520D series"
   Attribute "NickName" "" "Brother DCP-L2520D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-L2520D series;CLS:PRINTER;CID:Brother Laser Type1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2520d.ppd"
 }
 
@@ -279,7 +483,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-L2520DW series"
   Attribute "NickName" "" "Brother DCP-L2520DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-L2520DW series;CLS:PRINTER;CID:Brother Laser Type1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2520w.ppd"
 }
 
@@ -288,6 +510,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-L2530DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:DCP-L2530DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2530d.ppd"
 }
 
@@ -296,6 +524,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-L2537DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:DCP-L2537DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2537d.ppd"
 }
 
@@ -303,7 +537,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-L2540DW series"
   Attribute "NickName" "" "Brother DCP-L2540DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-L2540DW series;CLS:PRINTER;CID:Brother Laser Type1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2540d.ppd"
 }
 
@@ -312,6 +564,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother DCP-L2550DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:DCP-L2550DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2550d.ppd"
 }
 
@@ -319,7 +577,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-L2560DW series"
   Attribute "NickName" "" "Brother DCP-L2560DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:DCP-L2560DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS300-600,V1.3,DM1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2560d.ppd"
 }
 
@@ -328,6 +604,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother FAX-2820, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:FAX-2820;CLS:PRINTER;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2820.ppd"
 }
 
@@ -335,6 +617,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "FAX-2840"
   Attribute "NickName" "" "Brother FAX-2840, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;MFG:Brother;CMD:PJL,HBP;MDL:FAX-2840;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2840.ppd"
 }
 
@@ -343,6 +631,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-1110 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-1110 series;CLS:PRINTER;CID:Brother Laser Type3;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br1110.ppd"
 }
 
@@ -350,6 +644,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-1200 series"
   Attribute "NickName" "" "Brother HL-1200 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-1200 series;CLS:PRINTER;CID:Brother Laser Type3;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br1200.ppd"
 }
 
@@ -357,6 +657,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-1210W series"
   Attribute "NickName" "" "Brother HL-1210W series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-1210W series;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br1210.ppd"
 }
 
@@ -364,6 +670,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-1430 series"
   Attribute "NickName" "" "Brother HL-1430 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL;MDL:HL-1430 series;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br1430.ppd"
 }
 
@@ -371,6 +683,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-2030 series"
   Attribute "NickName" "" "Brother HL-2030 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2030 series;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2030.ppd"
 }
 
@@ -378,6 +696,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-2130 series"
   Attribute "NickName" "" "Brother HL-2130 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2130 series;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2130.ppd"
 }
 
@@ -385,6 +709,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-2140 series"
   Attribute "NickName" "" "Brother HL-2140 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2140 series;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2140.ppd"
 }
 
@@ -392,6 +722,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-2150N"
   Attribute "NickName" "" "Brother HL-2150N, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2150N;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2150.ppd"
 }
 
@@ -399,6 +735,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-2220 series"
   Attribute "NickName" "" "Brother HL-2220 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2220 series;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2220.ppd"
 }
 
@@ -406,6 +748,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-2230 series"
   Attribute "NickName" "" "Brother HL-2230 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2230 series;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2230.ppd"
 }
 
@@ -413,6 +761,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-2240 series"
   Attribute "NickName" "" "Brother HL-2240 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2240 series;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2240.ppd"
 }
 
@@ -421,6 +775,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-2240D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2240D series;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2240d.ppd"
 }
 
@@ -429,6 +789,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-2250DN series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2250DN series;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2250d.ppd"
 }
 
@@ -436,6 +802,24 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-2260"
   Attribute "NickName" "" "Brother HL-2260, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2260;CLS:PRINTER;CID:Brother Laser Type1;"
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "br2260.ppd"
 }
 
@@ -443,7 +827,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-2260D"
   Attribute "NickName" "" "Brother HL-2260D, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2260D;CLS:PRINTER;CID:Brother Laser Type1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "br2260d.ppd"
 }
 
@@ -453,6 +855,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2270DW series;CLS:PRINTER;CID:Brother Laser Type1;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2270d.ppd"
 }
 
@@ -461,6 +869,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-2280DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-2280DW;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br2280d.ppd"
 }
 
@@ -468,6 +882,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-5030 series"
   Attribute "NickName" "" "Brother HL-5030 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL;MDL:HL-5030 series;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br5030.ppd"
 }
 
@@ -475,6 +895,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-5040 series"
   Attribute "NickName" "" "Brother HL-5040 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-5040 series;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br5040.ppd"
 }
 
@@ -482,6 +908,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-5140 series"
   Attribute "NickName" "" "Brother HL-5140 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-5140 series;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br5140.ppd"
 }
 
@@ -491,6 +923,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,POSTSCRIPT;MDL:HL-5250DN series;CLS:PRINTER;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br5250d.ppd"
 }
 
@@ -499,6 +937,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-5350DN series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-5350DN series;CLS:PRINTER;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br5350d.ppd"
 }
 
@@ -508,6 +952,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-5370DW series;CLS:PRINTER;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br5370d.ppd"
 }
 
@@ -516,6 +966,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-5450DN series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-5450DN series;CLS:PRINTER;CID:Brother Laser Type2;URF:W8,CP1,IS11-19-4,MT1-3-4-5-8-11,OB10,PQ4,RS300-600-1200,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br5450d.ppd"
 }
 
@@ -524,6 +980,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L1232W, $USING"
   Attribute "1284DeviceID" "" "MMFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L1232W;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl1232.ppd"
 }
 
@@ -531,7 +993,27 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-L2300D series"
   Attribute "NickName" "" "Brother HL-L2300D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-L2300D series;CLS:PRINTER;CID:Brother Laser Type1;"
-  Duplex rotated
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2300d.ppd"
 }
 
@@ -539,6 +1021,24 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-L2305 series"
   Attribute "NickName" "" "Brother HL-L2305 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2305 series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS300-600,V1.3;"
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2305.ppd"
 }
 
@@ -547,6 +1047,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2310D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-L2310D series;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2310d.ppd"
 }
 
@@ -554,7 +1060,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-L2320D series"
   Attribute "NickName" "" "Brother HL-L2320D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-L2320D series;CLS:PRINTER;CID:Brother Laser Type1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2320d.ppd"
 }
 
@@ -564,6 +1088,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2325DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2325d.ppd"
 }
 
@@ -572,6 +1102,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2335D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-L2335D series;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2335d.ppd"
 }
 
@@ -579,7 +1115,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-L2340D series"
   Attribute "NickName" "" "Brother HL-L2340D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2340D series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS300-600,V1.3,DM1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2340d.ppd"
 }
 
@@ -588,6 +1142,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2350DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2350DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2350d.ppd"
 }
 
@@ -595,7 +1155,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-L2360D series"
   Attribute "NickName" "" "Brother HL-L2360D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-L2360D series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS300-600,V1.3,DM1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2360d.ppd"
 }
 
@@ -604,6 +1182,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2370DN series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-L2370DN series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2370d.ppd"
 }
 
@@ -612,6 +1196,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2375DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-L2375DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2375d.ppd"
 }
 
@@ -619,7 +1209,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "HL-L2380DW series"
   Attribute "NickName" "" "Brother HL-L2380DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-L2380DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS300-600,V1.3,DM1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2380d.ppd"
 }
 
@@ -628,6 +1236,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2390DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2390DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2390d.ppd"
 }
 
@@ -636,6 +1250,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2400D, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-L2400D;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2400d.ppd"
 }
 
@@ -644,6 +1264,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2400DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2400DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2400w.ppd"
 }
 
@@ -652,6 +1278,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2400DWE, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2400DWE;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2400e.ppd"
 }
 
@@ -660,6 +1292,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2402D, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-L2402D;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2402d.ppd"
 }
 
@@ -668,6 +1306,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2405W, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2405W;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2405.ppd"
 }
 
@@ -677,6 +1321,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:HL-L2440DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
   Duplex rotated
   Resolution k 1 0 0 0 "300dpi/300 DPI"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2440d.ppd"
 }
 
@@ -685,6 +1335,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L2460DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-L2460DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2460d.ppd"
 }
 
@@ -694,6 +1350,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:HL-L2480DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2480d.ppd"
 }
 
@@ -702,6 +1364,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother HL-L5000D series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:HL-L5000D series;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl5000d.ppd"
 }
 
@@ -709,6 +1377,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-1810 series"
   Attribute "NickName" "" "Brother MFC-1810 series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,XL2HB;MDL:MFC-1810 series;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br1810.ppd"
 }
 
@@ -716,6 +1390,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-1910W series"
   Attribute "NickName" "" "Brother MFC-1910W series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;MFG:Brother;CMD:PJL,HBP;MDL:MFC-1910W series;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br1910.ppd"
 }
 
@@ -723,6 +1403,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-7240"
   Attribute "NickName" "" "Brother MFC-7240, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;MFG:Brother;CMD:PJL,HBP;MDL:MFC-7240;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7240.ppd"
 }
 
@@ -730,6 +1416,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-7320"
   Attribute "NickName" "" "Brother MFC-7320, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:MFC-7320;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7320.ppd"
 }
 
@@ -737,6 +1429,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-7340"
   Attribute "NickName" "" "Brother MFC-7340, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:MFC-7340;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7340.ppd"
 }
 
@@ -744,6 +1442,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-7360N"
   Attribute "NickName" "" "Brother MFC-7360N, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:MFC-7360N;CLS:PRINTER;CID:Brother Laser Type1;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7360.ppd"
 }
 
@@ -753,6 +1457,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:MFC-7365DN;CLS:PRINTER;CID:Brother Laser Type1;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7365d.ppd"
 }
 
@@ -760,6 +1470,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-7420"
   Attribute "NickName" "" "Brother MFC-7420, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:MFC-7420;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7420.ppd"
 }
 
@@ -767,6 +1483,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-7440N"
   Attribute "NickName" "" "Brother MFC-7440N, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:MFC-7440N;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7440.ppd"
 }
 
@@ -775,6 +1497,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother MFC-7460DN, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:MFC-7460DN;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7460d.ppd"
 }
 
@@ -783,6 +1511,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother MFC-7860DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL;MDL:MFC-7860DW;CLS:PRINTER;CID:Brother Laser Type1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br7860d.ppd"
 }
 
@@ -790,6 +1524,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-8440"
   Attribute "NickName" "" "Brother MFC-8440, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:HBP,PJL,PCL,PCLXL;MDL:MFC-8440;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br8440.ppd"
 }
 
@@ -798,6 +1538,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother MFC-8710DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:MFC-8710DW;CLS:PRINTER;CID:Brother Laser Type2;URF:W8,CP1,IS11-19-4,MT1-3-4-5-8-11,OB10,PQ4,RS300-600-1200,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br8710d.ppd"
 }
 
@@ -807,6 +1553,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,POSTSCRIPT;MDL:MFC-8860DN;CLS:PRINTER;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br8860d.ppd"
 }
 
@@ -814,6 +1566,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-9160"
   Attribute "NickName" "" "Brother MFC-9160, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:HBP,PCL;MDL:MFC-9160;CLS:PRINTER;"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "br9160.ppd"
 }
 
@@ -821,7 +1579,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-L2685DW"
   Attribute "NickName" "" "Brother MFC-L2685DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:MFC-L2685DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS200-300-600,V1.3,DM1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2685d.ppd"
 }
 
@@ -830,6 +1606,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother MFC-L2690DW, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:MFC-L2690DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2690d.ppd"
 }
 
@@ -837,7 +1619,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-L2700DN series"
   Attribute "NickName" "" "Brother MFC-L2700DN series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-L2700DN series;CMD:PJL,HBP,URF;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2700d.ppd"
 }
 
@@ -845,7 +1645,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-L2700DW series"
   Attribute "NickName" "" "Brother MFC-L2700DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:MFC-L2700DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS200-300-600,V1.3,DM1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2700w.ppd"
 }
 
@@ -853,7 +1671,25 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "MFC-L2740DW series"
   Attribute "NickName" "" "Brother MFC-L2740DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:MFC-L2740DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS200-300-600,V1.3,DM1;"
-  Duplex rotated
+  Duplex normal
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
   PCFileName "brl2740d.ppd"
 }
 
@@ -862,6 +1698,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother MFC-L2710DN series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:MFC-L2710DN series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2710d.ppd"
 }
 
@@ -870,6 +1712,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother MFC-L2710DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:MFC-L2710DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2710w.ppd"
 }
 
@@ -878,6 +1726,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother MFC-L2750DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:MFC-L2750DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2750d.ppd"
 }
 
@@ -887,6 +1741,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP,URF;MDL:MFC-L2800DW;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ3-4-5,RS300-600-1200,V1.5,DM1;"
   Resolution k 1 0 0 0 "300dpi/300 DPI"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl2800d.ppd"
 }
 
@@ -895,6 +1755,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Brother MFC-L5800DW series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,PCL,PCLXL,URF;MDL:MFC-L5800DW series;CLS:PRINTER;CID:Brother Laser Type1;URF:W8,CP1,IS19-1,MT1-3-4-5-8,OB10,PQ4,RS300-600-1200,V1.4,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "brl5800d.ppd"
 }
 
@@ -903,6 +1769,12 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Fuji Xerox DocuPrint P265 dw, $USING"
   Attribute "1284DeviceID" "" "MFG:FX;CMD:PJL,PCL,PCLXL,URF;MDL:DocuPrint P265 dw;CLS:PRINTER;CID:FX Laser Type1;URF:W8,CP1,IS4-1,MT1-3-4-5-8,OB10,PQ4,RS300-600,V1.3,DM1;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "fxp265d.ppd"
 }
 
@@ -911,5 +1783,513 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   Attribute "NickName" "" "Lenovo LJ2650DN, $USING"
   Attribute "1284DeviceID" "" "MFG:Lenovo;CMD:PJL,PCL,PCLXL;MDL:LJ2650DN;CLS:PRINTER;"
   Duplex rotated
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 2 "Tray2/Tray 2"
+  InputSlot 3 "Tray3/Tray 3"
+  InputSlot 4 "MPTray/MP Tray"
+  InputSlot 5 "Manual/Manual"
   PCFileName "lnj2650d.ppd"
+}
+
+// Added from Brother's macOS driver 1.5.0: these models share rastertobrother2300 with the HL-L2300D.
+{
+  ModelName "DCP-7180DN"
+  Attribute "NickName" "" "Brother DCP-7180DN, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:DCP-7180DN"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "br7180dn.ppd"
+}
+
+{
+  ModelName "DCP-7189DW"
+  Attribute "NickName" "" "Brother DCP-7189DW, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:DCP-7189DW"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "br7189dw.ppd"
+}
+
+{
+  ModelName "DCP-L2540DN series"
+  Attribute "NickName" "" "Brother DCP-L2540DN series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:DCP-L2540DN series"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brl2540dn.ppd"
+}
+
+{
+  ModelName "FAX-L2700DN series"
+  Attribute "NickName" "" "Brother FAX-L2700DN series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:FAX-L2700DN series"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brfaxl2700dn.ppd"
+}
+
+{
+  ModelName "HL-2560DN"
+  Attribute "NickName" "" "Brother HL-2560DN, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:HL-2560DN"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brhl2560dn.ppd"
+}
+
+{
+  ModelName "HL-2569DW"
+  Attribute "NickName" "" "Brother HL-2569DW, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:HL-2569DW"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brhl2569dw.ppd"
+}
+
+{
+  ModelName "HL-L2300 series"
+  Attribute "NickName" "" "Brother HL-L2300 series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:HL-L2300 series"
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brhll2300.ppd"
+}
+
+{
+  ModelName "HL-L2315D series"
+  Attribute "NickName" "" "Brother HL-L2315D series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:HL-L2315D series"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brhll2315d.ppd"
+}
+
+{
+  ModelName "MFC-7380"
+  Attribute "NickName" "" "Brother MFC-7380, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-7380"
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfc7380.ppd"
+}
+
+{
+  ModelName "MFC-7480D"
+  Attribute "NickName" "" "Brother MFC-7480D, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-7480D"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfc7480d.ppd"
+}
+
+{
+  ModelName "MFC-7880DN"
+  Attribute "NickName" "" "Brother MFC-7880DN, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-7880DN"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfc7880dn.ppd"
+}
+
+{
+  ModelName "MFC-7889DW"
+  Attribute "NickName" "" "Brother MFC-7889DW, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-7889DW"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfc7889dw.ppd"
+}
+
+{
+  ModelName "MFC-L2680W"
+  Attribute "NickName" "" "Brother MFC-L2680W, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-L2680W"
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfcl2680w.ppd"
+}
+
+{
+  ModelName "MFC-L2700D series"
+  Attribute "NickName" "" "Brother MFC-L2700D series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-L2700D series"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfcl2700d.ppd"
+}
+
+{
+  ModelName "MFC-L2705DW"
+  Attribute "NickName" "" "Brother MFC-L2705DW, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-L2705DW"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfcl2705dw.ppd"
+}
+
+{
+  ModelName "MFC-L2707DW"
+  Attribute "NickName" "" "Brother MFC-L2707DW, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-L2707DW"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfcl2707dw.ppd"
+}
+
+{
+  ModelName "MFC-L2720DN series"
+  Attribute "NickName" "" "Brother MFC-L2720DN series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-L2720DN series"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfcl2720dn.ppd"
+}
+
+{
+  ModelName "MFC-L2720DW series"
+  Attribute "NickName" "" "Brother MFC-L2720DW series, $USING"
+  Attribute "1284DeviceID" "" "MFG:Brother;MDL:MFC-L2720DW series"
+  Duplex normal
+
+
+  // Brother HBP profile (models that share Brother's rastertobrother2300):
+  // Brother's media names, tray PCL, paper-curl / toner-fixing PJL, native
+  // duplex commands, 128-line bands, mode-1032 HQ1200 and status filter.
+  Attribute "brlaserProfile" "" "brother-hbp"
+  Filter application/vnd.cups-command 0 commandtobrlaser
+  Attribute "cupsCommands" "" "ReportLevels PrintSelfTestPage"
+  HWMargins 12 12 12 12
+  Option Resolution PickOne AnySetup 10
+    Choice "300dpi/300 DPI (draft)" "<</HWResolution[300 300]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0>>setpagedevice"
+    Choice "2400x600dpi/HQ1200 (Brother mode)" "<</HWResolution[1200 1200]/cupsColorSpace 3/cupsBitsPerColor 1/cupsRowCount 0/cupsRowFeed 0/cupsRowStep 0/cupsInteger12 3>>setpagedevice"
+  CustomMedia "A5Rotated/A5 Long Edge" 595 420 12 12 12 12 "<</PageSize[595 420]/ImagingBBox null>>setpagedevice" "<</PageSize[595 420]/ImagingBBox null>>setpagedevice"
+  CustomMedia "ISOB5/ISO B5" 499 709 12 12 12 12 "<</PageSize[499 709]/ImagingBBox null>>setpagedevice" "<</PageSize[499 709]/ImagingBBox null>>setpagedevice"
+  CustomMedia "Env10/Envelope #10" 297 684 12 12 12 12 "<</PageSize[297 684]/ImagingBBox null>>setpagedevice" "<</PageSize[297 684]/ImagingBBox null>>setpagedevice"
+  CustomMedia "FanFoldGermanLegal/Folio" 612 936 12 12 12 12 "<</PageSize[612 936]/ImagingBBox null>>setpagedevice" "<</PageSize[612 936]/ImagingBBox null>>setpagedevice"
+  CustomMedia "3x5/3 x 5 in" 216 360 12 12 12 12 "<</PageSize[216 360]/ImagingBBox null>>setpagedevice" "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+  *InputSlot 0 "Auto/Auto (printer chooses)"
+  InputSlot 1 "Tray1/Tray 1"
+  InputSlot 5 "Manual/Manual feed slot"
+  PCFileName "brmfcl2720dw.ppd"
 }

@@ -42,6 +42,20 @@ class block {
     return line_bytes_ + size < max_block_size_;
   }
 
+  // Same as flush() but the band header carries an explicit row count
+  // (Brother mode 1032 stores two entries per raster row).
+  void flush_rows(FILE *f, int rows) {
+    if (!empty()) {
+      fprintf(f, "%dw%c%c",
+              line_bytes_ + 2, (rows >> 8) & 0xff, rows & 0xff);
+      for (auto &line : lines_) {
+        fwrite(line.data(), 1, line.size(), f);
+      }
+      line_bytes_ = 0;
+      lines_.clear();
+    }
+  }
+
   void flush(FILE *f) {
     if (!empty()) {
       fprintf(f, "%dw%c%c",
