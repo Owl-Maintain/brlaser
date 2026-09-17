@@ -108,6 +108,13 @@ configure_file(
 
 include_directories("${PROJECT_BINARY_DIR}")
 
+if(APPLE)
+  set(BRLASER_STATE_DIR "/Library/Application Support/brlaser" CACHE STRING "Directory for supply baselines")
+else()
+  set(BRLASER_STATE_DIR "/var/lib/brlaser" CACHE STRING "Directory for supply baselines")
+endif()
+add_compile_definitions(BRLASER_STATE_DIR="${BRLASER_STATE_DIR}")
+
 add_executable(rastertobrlaser src/main.cc src/job.cc src/line.cc src/debug.cc)
 target_compile_options(rastertobrlaser PRIVATE ${CUPS_CFLAGS})
 target_link_libraries(rastertobrlaser ${CUPS_LIBS})
@@ -119,6 +126,7 @@ add_executable(test_line test/test_line.cc src/line.cc)
 add_executable(test_block test/test_block.cc)
 add_executable(test_job test/test_job.cc src/job.cc src/line.cc)
 add_executable(test_line16 test/test_line16.cc src/line.cc)
+add_executable(test_supplies test/test_supplies.cc src/supplies.cc)
 
 enable_testing()
 add_test(test_lest test_lest)
@@ -126,10 +134,11 @@ add_test(test_line test_line)
 add_test(test_block test_block)
 add_test(test_job test_job)
 add_test(test_line16 test_line16)
+add_test(test_supplies test_supplies)
 
 # Autotools-style "make check" command
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-add_dependencies(check test_lest test_line test_block test_job test_line16)
+add_dependencies(check test_lest test_line test_block test_job test_line16 test_supplies)
 
 
 # Installation
