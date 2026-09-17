@@ -115,6 +115,11 @@ else()
 endif()
 add_compile_definitions(BRLASER_STATE_DIR="${BRLASER_STATE_DIR}")
 
+add_executable(commandtobrlaser src/command.cc src/supplies.cc src/status.cc)
+target_link_libraries(commandtobrlaser ${CUPS_LIBS})
+target_link_libraries(commandtobrlaser ${CUPS_LDFLAGS})
+install(TARGETS commandtobrlaser DESTINATION ${CUPS_SERVER_BIN}/filter)
+
 add_executable(rastertobrlaser src/main.cc src/job.cc src/line.cc src/debug.cc)
 target_compile_options(rastertobrlaser PRIVATE ${CUPS_CFLAGS})
 target_link_libraries(rastertobrlaser ${CUPS_LIBS})
@@ -128,6 +133,9 @@ add_executable(test_job test/test_job.cc src/job.cc src/line.cc)
 add_executable(test_line16 test/test_line16.cc src/line.cc)
 add_executable(test_supplies test/test_supplies.cc src/supplies.cc)
 add_executable(test_halftone test/test_halftone.cc src/halftone.cc)
+add_executable(test_status test/test_status.cc src/status.cc src/supplies.cc)
+target_link_libraries(test_status ${CUPS_LIBS})
+target_link_libraries(test_status ${CUPS_LDFLAGS})
 
 enable_testing()
 add_test(test_lest test_lest)
@@ -137,10 +145,11 @@ add_test(test_job test_job)
 add_test(test_line16 test_line16)
 add_test(test_supplies test_supplies)
 add_test(test_halftone test_halftone)
+add_test(test_status test_status)
 
 # Autotools-style "make check" command
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-add_dependencies(check test_lest test_line test_block test_job test_line16 test_supplies test_halftone)
+add_dependencies(check test_lest test_line test_block test_job test_line16 test_supplies test_halftone test_status)
 
 
 # Installation
