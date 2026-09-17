@@ -127,6 +127,7 @@ add_executable(test_block test/test_block.cc)
 add_executable(test_job test/test_job.cc src/job.cc src/line.cc)
 add_executable(test_line16 test/test_line16.cc src/line.cc)
 add_executable(test_supplies test/test_supplies.cc src/supplies.cc)
+add_executable(test_halftone test/test_halftone.cc src/halftone.cc)
 
 enable_testing()
 add_test(test_lest test_lest)
@@ -135,10 +136,11 @@ add_test(test_block test_block)
 add_test(test_job test_job)
 add_test(test_line16 test_line16)
 add_test(test_supplies test_supplies)
+add_test(test_halftone test_halftone)
 
 # Autotools-style "make check" command
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-add_dependencies(check test_lest test_line test_block test_job test_line16 test_supplies)
+add_dependencies(check test_lest test_line test_block test_job test_line16 test_supplies test_halftone)
 
 
 # Installation
