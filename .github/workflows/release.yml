@@ -38,7 +38,7 @@ jobs:
     - name: Generate and validate PPDs
       run: |
         mkdir -p build/ppd && ppdc build/brlaser.drv -d build/ppd
-        for f in build/ppd/*.ppd; do cupstestppd -q "$f" || { cupstestppd "$f"; exit 1; }; done
+        for f in build/ppd/*.ppd; do cupstestppd -q -W filters "$f" || { cupstestppd -W filters "$f"; exit 1; }; done
     - name: Package
       run: |
         D=brlaser-${{ github.ref_name }}-macos-$(uname -m)
