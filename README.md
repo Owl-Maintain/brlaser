@@ -131,6 +131,10 @@ You'll also need ``Ghostscript``, in case that's not installed automatically.
 
 Once brlaser is installed, you can add your printer using the usual CUPS interface.
 
+**macOS:** every release ships a ``brlaser-<version>-macos-arm64.zip`` with the filter, the
+PPDs and an installer; see [macos/README.md](macos/README.md). (``make install`` does not
+work on macOS because the CUPS filter directory is protected by SIP.)
+
 
 Testing Other Printers
 ----------------------
