@@ -96,11 +96,90 @@ if(NOT HAVE_CUPS_RASTER_H)
 endif()
 
 
+## Configure paths
+
+if(APPLE)
+  set(_DEFAULT_PPD_DIR "/Library/Printers/PPDs/Contents/Resources")
+  set(_DEFAULT_FILTER_DIR "/Library/Printers/brlaser/Filter")
+else()
+  set(_DEFAULT_DRV_DIR "${CUPS_DATA_DIR}/drv")
+  set(_DEFAULT_PPD_DIR "${CUPS_DATA_DIR}/model/brlaser")
+  set(_DEFAULT_FILTER_DIR "${CUPS_SERVER_BIN}/filter")
+
+  set(CUPS_DRV_DIR "${_DEFAULT_DRV_DIR}" CACHE PATH
+    "CUPS drv files directory")
+endif()
+
+set(CUPS_PPD_DIR "${_DEFAULT_PPD_DIR}" CACHE PATH
+    "CUPS PPD files directory")
+set(CUPS_FILTER_DIR "${_DEFAULT_FILTER_DIR}" CACHE PATH
+    "CUPS filters directory")
+
+
+## Build options
+
+option(INSTALL_PPD "Compile and install PPD printer drivers" OFF)
+
+if(APPLE AND NOT INSTALL_PPD)
+  set(INSTALL_PPD ON CACHE BOOL "Compile and install PPD printer drivers" FORCE)
+  message(STATUS "PPD generation is required on macOS; enabling it automatically")
+endif()
+
+option(INSTALL_STAGED "Create a staged installation tree" OFF)
+
+if(INSTALL_STAGED AND NOT INSTALL_PPD)
+  set(INSTALL_PPD ON CACHE BOOL "Compile and install PPD printer drivers" FORCE)
+  message(STATUS "PPD generation is required on staging; enabling it automatically")
+  message(STATUS "Staging installs include both PPD and DRV printer drivers")
+endif()
+
+
 ## Build instructions
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/brlaser.drv.in"
   "${PROJECT_BINARY_DIR}/brlaser.drv")
+
+if(INSTALL_PPD)
+  find_program(PPDC_EXECUTABLE NAMES ppdc)
+  if(NOT PPDC_EXECUTABLE)
+    message(FATAL_ERROR "ppdc command not found. Did you try installing it via Homebrew (cups) or MacPorts (cups-ppdc).")
+  endif()
+
+  set(BRLASER_DRV "${PROJECT_BINARY_DIR}/brlaser.drv")
+  set(BRLASER_PPD_DIR "${PROJECT_BINARY_DIR}/ppd")
+  set(BRLASER_PPD_STAMP "${BRLASER_PPD_DIR}/.stamp")
+
+  if(APPLE)
+    set(BRLASER_DRV_MACOS "${PROJECT_BINARY_DIR}/brlaser.macos.drv")
+
+    add_custom_command(
+      OUTPUT "${BRLASER_DRV_MACOS}"
+      COMMAND "${CMAKE_COMMAND}"
+        -DINPUT=${BRLASER_DRV}
+        -DOUTPUT=${BRLASER_DRV_MACOS}
+        -DFILTER_PATH=${CUPS_FILTER_DIR}/rastertobrlaser
+        -P "${PROJECT_SOURCE_DIR}/macos-drv.cmake"
+      DEPENDS
+        "${PROJECT_BINARY_DIR}/brlaser.drv"
+        "${PROJECT_SOURCE_DIR}/macos-drv.cmake"
+      VERBATIM
+      COMMENT "Preparing macOS brlaser driver definition")
+
+    set(BRLASER_DRV "${BRLASER_DRV_MACOS}")
+  endif()
+
+  add_custom_command(
+    OUTPUT "${BRLASER_PPD_STAMP}"
+    COMMAND "${CMAKE_COMMAND}" -E make_directory "${BRLASER_PPD_DIR}"
+    COMMAND "${PPDC_EXECUTABLE}" "${BRLASER_DRV}" -d "${BRLASER_PPD_DIR}"
+    COMMAND "${CMAKE_COMMAND}" -E touch "${BRLASER_PPD_STAMP}"
+    DEPENDS "${BRLASER_DRV}"
+    VERBATIM
+    COMMENT "Generating PPD files with ppdc")
+
+  add_custom_target(brlaser-ppd ALL DEPENDS "${BRLASER_PPD_STAMP}")
+endif()
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
@@ -132,9 +211,31 @@ add_dependencies(check test_lest test_line test_block test_job)
 
 # Installation
 
+if(INSTALL_STAGED)
+  # Staged installs are used to assemble the files that
+  # will be packaged into an archive.
+  # The paths are configured here because CUPS_FILTER_DIR
+  # is used earlier to generate the macOS driver definition.
+  set(_STAGING_ROOT "${PROJECT_BINARY_DIR}/staging")
+  set(CUPS_FILTER_DIR "${_STAGING_ROOT}")
+  set(CUPS_DRV_DIR "${_STAGING_ROOT}")
+  set(CUPS_PPD_DIR "${_STAGING_ROOT}/ppd")
+endif()
+
 install(
   TARGETS rastertobrlaser
-  DESTINATION "${CUPS_SERVER_BIN}/filter")
-install(
-  FILES "${PROJECT_BINARY_DIR}/brlaser.drv"
-  DESTINATION "${CUPS_DATA_DIR}/drv")
+  DESTINATION "${CUPS_FILTER_DIR}")
+
+if(NOT INSTALL_PPD OR INSTALL_STAGED)
+  install(
+    FILES "${PROJECT_BINARY_DIR}/brlaser.drv"
+    DESTINATION "${CUPS_DRV_DIR}")
+endif()
+
+if(INSTALL_PPD OR INSTALL_STAGED)
+  install(
+    DIRECTORY "${BRLASER_PPD_DIR}/"
+    DESTINATION "${CUPS_PPD_DIR}"
+    FILES_MATCHING
+    PATTERN "*.ppd")
+endif()
