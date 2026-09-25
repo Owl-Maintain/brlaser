@@ -37,3 +37,20 @@ jobs:
           CXX: ${{ matrix.compiler }}
       - name: Run tests
         run: make check
+      - name: Generate and validate PPDs
+        if: matrix.compiler == 'clang++'
+        run: |
+          mkdir -p ppd && ppdc brlaser.drv -d ppd
+          for f in ppd/*.ppd; do cupstestppd -q -W filters "$f" || { echo "cupstestppd failed: $f"; cupstestppd -W filters "$f"; exit 1; }; done
+          echo "validated $(ls ppd/*.ppd | wc -l | tr -d ' ') PPDs"
+      - name: Package for macOS
+        if: matrix.compiler == 'clang++'
+        run: |
+          mkdir -p dist/brlaser-macos-$(uname -m)
+          cp rastertobrlaser macos/install.sh macos/uninstall.sh macos/README.md COPYING dist/brlaser-macos-$(uname -m)/
+          cp -R ppd dist/brlaser-macos-$(uname -m)/ppd
+      - uses: actions/upload-artifact@v4
+        if: matrix.compiler == 'clang++'
+        with:
+          name: brlaser-macos-${{ runner.arch }}
+          path: dist/
