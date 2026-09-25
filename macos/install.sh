@@ -21,10 +21,9 @@ PPD_DEST=/Library/Printers/PPDs/Contents/Resources
 mkdir -p "$DEST" "$PPD_DEST"
 cp "$FILTER_SRC" "$DEST/rastertobrlaser"
 chmod 755 "$DEST/rastertobrlaser"
-# A downloaded binary carries a quarantine flag; cupsd refuses to exec quarantined filters.
+# A binary unpacked from a downloaded zip inherits com.apple.quarantine; Gatekeeper then kills the
+# filter when CUPS starts it (the job reports completed, nothing prints). CUPS itself doesn't check it.
 xattr -d com.apple.quarantine "$DEST/rastertobrlaser" 2>/dev/null || true
-# An ad-hoc signature is enough for a local CUPS filter and avoids "killed" on Apple Silicon.
-codesign -s - -f "$DEST/rastertobrlaser" >/dev/null 2>&1 || true
 
 n=0
 for f in "$PPD_SRC"/*.ppd; do
@@ -42,7 +41,12 @@ for f in "$PPD_SRC"/*.ppd; do
 done
 chown -R root:wheel "$DEST"
 
-"$DEST/rastertobrlaser" 2>&1 | grep -q "Need arguments" || { echo "ERROR: filter does not run on this Mac"; exit 1; }
+# The filter prints its usage and exits 1 when run without arguments; exit 137 means macOS killed it.
+rc=0; out=$("$DEST/rastertobrlaser" 2>&1) || rc=$?
+case "$out" in
+  *"rastertobrlaser job-id"*) ;;
+  *) echo "ERROR: filter does not run on this Mac (exit $rc)"; exit 1 ;;
+esac
 echo "Installed rastertobrlaser and $n PPDs."
 echo "Add the printer in System Settings > Printers & Scanners > Add Printer..., then in the"
 echo "'Use' menu choose 'Select Software...' and search for 'brlaser'."
