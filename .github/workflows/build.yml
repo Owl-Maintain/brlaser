@@ -37,3 +37,19 @@ jobs:
           CXX: ${{ matrix.compiler }}
       - name: Run tests
         run: make check
+      - name: Install and validate PPDs
+        # The runner is disposable, so install for real: strict cupstestppd then also checks
+        # that each *cupsFilter path points at the installed, root-owned filter.
+        run: |
+          sudo "$(command -v cmake)" --install .
+          n=0; fails=0
+          for f in ppd/*.ppd; do
+            ppd="/Library/Printers/PPDs/Contents/Resources/$(basename "$f")"
+            n=$((n+1))
+            if ! cupstestppd -q "$ppd"; then
+              cupstestppd "$ppd" || true
+              fails=$((fails+1))
+            fi
+          done
+          echo "cupstestppd: $n PPDs checked, $fails failed"
+          [ "$n" -gt 0 ] && [ "$fails" -eq 0 ]
