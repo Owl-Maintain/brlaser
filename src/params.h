@@ -1,6 +1,6 @@
 // This file is part of the brlaser printer driver.
 //
-// Copyright 2013 Peter De Wachter
+// Copyright 2026 jessssssux
 //
 // brlaser is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,23 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with brlaser.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef LINE_H
-#define LINE_H
+// Turns a CUPS page header (plus the vendor profile read from the PPD) into
+// the page_params the encoder uses: paper and media names, tray, options.
+#ifndef PARAMS_H
+#define PARAMS_H
+#include <cups/raster.h>
+#include <string>
+#include "job.h"
 
-#include <stdint.h>
-#include <vector>
-
-std::vector<uint8_t> encode_line(
-    const std::vector<uint8_t> &line,
-    const std::vector<uint8_t> &reference);
-
-std::vector<uint8_t> encode_line(
-    const std::vector<uint8_t> &line);
-
-// Brother raster mode 1032 (HQ1200): same command set, but every offset,
-// count and value is in 16-bit big-endian units instead of bytes.
-std::vector<uint8_t> encode_line16(const std::vector<uint16_t> &line,
-                                   const std::vector<uint16_t> &reference);
-std::vector<uint8_t> encode_line16(const std::vector<uint16_t> &line);
-
-#endif  // LINE_H
+page_params build_page_params(const cups_page_header2_t &header, int vendor_profile,
+                              const std::string &user, const std::string &title);
+#endif

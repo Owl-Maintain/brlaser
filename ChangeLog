@@ -1,3 +1,16 @@
+brlaser (unreleased)
+    Brother HL-L2300D family profile for 37 models, 18 of them new:
+      Brother media keywords, tray PCL commands, duplex commands, 300 dpi,
+      HQ1200 (PCL mode 1032), improve-output and sleep-timer PJL, skip
+      blank pages, more paper sizes, job identity, printer status during
+      a job.
+    Halftone option: error diffusion, clustered dot, threshold, and the
+      measured Brother Graphics and Text screens.
+    New filter commandtobrlaser: ReportLevels and PrintSelfTestPage over
+      the PJL back channel, with supply estimates from the page counter.
+    Unit tests for the 16-bit encoder, the halftones, the supply
+      estimates, the status parser and the page parameters.
+
 brlaser v6.2.8
     New printer entries:
         Brother HL-1210W series

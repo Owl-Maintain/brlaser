@@ -20,6 +20,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <cups/raster.h>
+#include <cups/ppd.h>
+#include <stdlib.h>
 #include <algorithm>
 #include <functional>
 #include <string>
@@ -28,6 +30,8 @@
 #include "config.h"
 #include "job.h"
 #include "debug.h"
+#include "halftone.h"
+#include "params.h"
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -45,9 +49,26 @@ void sigterm_handler(int sig) {
 }
 
 
+// ---- in-filter halftoning ----
+int g_halftone_mode = 0;      // 0 = CUPS 1-bit, otherwise see halftone.h
+halftone *g_halftone = nullptr;
+std::vector<uint8_t> g_grey;  // one 8-bit input line
+
+void halftone_setup(unsigned width) {
+  delete g_halftone;
+  g_halftone = new halftone(g_halftone_mode, width);
+  g_grey.assign(width, 0);
+}
+
 bool next_line(std::vector<uint8_t> &buf) {
   if (interrupted) {
     return false;
+  }
+  if (g_halftone) {
+    if (cupsRasterReadPixels(ras, g_grey.data(), g_grey.size()) != g_grey.size())
+      return false;
+    g_halftone->dither(g_grey, buf);
+    return true;
   }
   return cupsRasterReadPixels(ras, buf.data(), buf.size()) == buf.size();
 }
@@ -86,49 +107,24 @@ std::string ascii_job_name(const char *job_id, const char *job_user, const char 
   return result;
 }
 
-page_params build_page_params(const cups_page_header2_t &header) {
-  static const std::array<std::string, 6> sources = {{
-    "AUTO", "T1", "T2", "T3", "MP", "MANUAL"
-  }};
-  static const std::map<std::string, std::string> sizes = {
-    { "A4", "A4" },
-    { "A5", "A5" },
-    { "A6", "A6" },
-    { "B5", "B5" },
-    { "B6", "B6" },
-    { "EnvC5", "C5" },
-    { "EnvMonarch", "MONARCH" },
-    { "EnvPRC5", "DL" },
-    { "EnvDL", "DL" },
-    { "Executive", "EXECUTIVE" },
-    { "Legal", "LEGAL" },
-    { "Letter", "LETTER" }
-  };
-
-  page_params p = { };
-  p.num_copies = header.NumCopies;
-  p.resolution = header.HWResolution[0];
-  p.page_speed = header.cupsInteger[12];
-  p.ras1200 = (p.resolution == 1200 && p.page_speed == 2);
-  p.economode = header.cupsInteger[10];
-  p.density_adjust = (header.cupsInteger[11] - 100);
-  p.mediatype = header.MediaType;
-  p.duplex = header.Duplex;
-  p.tumble = header.Tumble;
-
-  if (header.MediaPosition < sources.size())
-    p.sourcetray = sources[header.MediaPosition];
-  else
-    p.sourcetray = sources[0];
-
-  auto size_it = sizes.find(header.cupsPageSizeName);
-  if (size_it != sizes.end())
-    p.papersize = size_it->second;
-  else
-    p.papersize = "A4";
-
-  return p;
+int vendor_profile_from_ppd() {
+  // Profile is a PPD attribute so it needs no UI option and survives ppdc's
+  // additive merging of per-model options.
+  const char *ppd_path = getenv("PPD");
+  if (!ppd_path) return 0;
+  ppd_file_t *ppd = ppdOpenFile(ppd_path);
+  if (!ppd) return 0;
+  int profile = 0;
+  ppd_attr_t *attr = ppdFindAttr(ppd, "brlaserProfile", NULL);
+  if (attr && attr->value && std::string(attr->value) == "brother-hbp") {
+    profile = 1;
+  }
+  ppdClose(ppd);
+  return profile;
 }
+
+int g_vendor_profile = 0;
+std::string g_user, g_title;
 
 }  // namespace
 
@@ -147,10 +143,20 @@ int main(int argc, char *argv[]) {
   // const int job_copies = atoi(argv[4]);
   // const char *job_options = argv[5];
   const char *job_filename = argv[6];
+  auto clean = [](const char *in) {
+    std::string r;
+    for (; *in && r.size() < 60; ++in) r += (*in >= 32 && *in < 127 && *in != '"' && *in != '\\') ? *in : ' ';
+    return r;
+  };
+  g_user = clean(job_user);
+  g_title = clean(job_name);
   // const char *job_charset = getenv("CHARSET");
 
   signal(SIGTERM, sigterm_handler);
   signal(SIGPIPE, SIG_IGN);
+
+  g_vendor_profile = vendor_profile_from_ppd();
+  fprintf(stderr, "DEBUG: brlaser: vendor profile %d\n", g_vendor_profile);
 
   int fd = STDIN_FILENO;
   if (job_filename) {
@@ -178,10 +184,22 @@ int main(int argc, char *argv[]) {
     job job(stdout, ascii_job_name(job_id, job_user, job_name));
     cups_page_header2_t header;
     while (!interrupted && cupsRasterReadHeader2(ras, &header)) {
-      if (header.cupsBitsPerPixel != 1
+      g_halftone_mode = header.cupsInteger[8];
+      const bool grey_in = g_halftone_mode && header.cupsBitsPerPixel == 8
+                           && header.cupsBitsPerColor == 8 && header.cupsNumColors == 1
+                           && header.cupsBytesPerLine == header.cupsWidth;
+      if (grey_in) {
+        halftone_setup(header.cupsWidth);
+      } else {
+        g_halftone_mode = 0;
+        delete g_halftone;
+        g_halftone = nullptr;
+      }
+      const unsigned out_bytes_per_line = grey_in ? (header.cupsWidth + 7) / 8 : header.cupsBytesPerLine;
+      if ((!grey_in && (header.cupsBitsPerPixel != 1
           || header.cupsBitsPerColor != 1
-          || header.cupsNumColors != 1
-          || header.cupsBytesPerLine > 10000) {
+          || header.cupsNumColors != 1))
+          || out_bytes_per_line > 10000) {
         fprintf(stderr, "ERROR: " PACKAGE ": Page %d: Bogus raster data.\n", job.pages() + 1);
         dump_page_header(header);
         return 1;
@@ -190,11 +208,12 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "DEBUG: " PACKAGE ": Page header of first page\n");
         dump_page_header(header);
       }
-      job.encode_page(build_page_params(header),
-                      header.cupsHeight,
-                      header.cupsBytesPerLine,
-                      next_line);
-      fprintf(stderr, "PAGE: %d %d\n", job.pages(), header.NumCopies);
+      if (job.encode_page(build_page_params(header, g_vendor_profile, g_user, g_title),
+                          header.cupsHeight,
+                          out_bytes_per_line,
+                          next_line)) {
+        fprintf(stderr, "PAGE: %d %d\n", job.pages(), header.NumCopies);
+      }
     }
 
     if (job.pages() == 0) {
