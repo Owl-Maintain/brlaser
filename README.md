@@ -132,6 +132,16 @@ You'll also need ``Ghostscript``, in case that's not installed automatically.
 Once brlaser is installed, you can add your printer using the usual CUPS interface.
 
 
+### macOS (via Homebrew)
+On macOS, you can install brlaser from the DiegoQueiroz Homebrew tap:
+```sh
+brew tap DiegoQueiroz/brlaser
+brew trust DiegoQueiroz/brlaser
+brew install --cask brlaser
+```
+Visit [DiegoQueiroz/homebrew-brlaser](https://github.com/DiegoQueiroz/homebrew-brlaser) for more info.
+
+
 Testing Other Printers
 ----------------------
 
