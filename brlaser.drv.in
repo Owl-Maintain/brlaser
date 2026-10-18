@@ -146,6 +146,7 @@ Option "brlaserDensityAdjust/Toner Density" PickOne AnySetup 10
   ModelName "DCP-1610W series"
   Attribute "NickName" "" "Brother DCP-1610W series, $USING"
   Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:DCP-1610W series;CLS:PRINTER;CID:Brother Laser Type1;"
+  Resolution k 1 0 0 0 "300dpi/300 DPI"
   PCFileName "br1610.ppd"
 }
 
