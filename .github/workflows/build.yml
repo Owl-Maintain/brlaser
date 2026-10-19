@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Configure
-        run: cmake .
+        run: cmake -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" .
       - name: Make
         run: make
         env:
@@ -40,8 +40,18 @@ jobs:
       - name: Install and validate PPDs
         # The runner is disposable, so install for real: strict cupstestppd then also checks
         # that each *cupsFilter path points at the installed, root-owned filter.
+        # Installation goes through a package built the same way release.yml builds it, so
+        # this job exercises the artifact we ship instead of a bare staging tree.
         run: |
-          sudo "$(command -v cmake)" --install .
+          DESTDIR="$PWD/payload" cmake --install .
+          xattr -cr payload 2>/dev/null || true
+          VERSION="$(sed -n 's/^set(BRLASER_VERSION "\(.*\)")/\1/p' CMakeLists.txt)"
+          pkgbuild --root payload \
+            --identifier org.brlaser.brlaser \
+            --version "${VERSION:-1.0}" \
+            --install-location / \
+            brlaser.pkg
+          sudo installer -pkg brlaser.pkg -target /
           n=0; fails=0
           for f in ppd/*.ppd; do
             ppd="/Library/Printers/PPDs/Contents/Resources/$(basename "$f")"
