@@ -94,7 +94,8 @@ page_params build_page_params(const cups_page_header2_t &header) {
     { "A4", "A4" },
     { "A5", "A5" },
     { "A6", "A6" },
-    { "B5", "B5" },
+    // CUPS "B5" is JIS B5; Brother's PJL "B5" is ISO B5.
+    { "B5", "JISB5" },
     { "B6", "B6" },
     { "EnvC5", "C5" },
     { "EnvMonarch", "MONARCH" },
