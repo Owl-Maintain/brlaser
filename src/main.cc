@@ -111,7 +111,13 @@ page_params build_page_params(const cups_page_header2_t &header) {
   p.page_speed = header.cupsInteger[12];
   p.ras1200 = (p.resolution == 1200 && p.page_speed == 2);
   p.economode = header.cupsInteger[10];
-  p.density_adjust = (header.cupsInteger[11] - 100);
+  // The PPD offers cupsInteger11 values 94-106 (100 = default). PPDs from
+  // older brlaser versions don't set it, leaving 0; treat anything out of
+  // range as "no adjustment" rather than sending DENSITY=-100.
+  if (header.cupsInteger[11] >= 94 && header.cupsInteger[11] <= 106)
+    p.density_adjust = header.cupsInteger[11] - 100;
+  else
+    p.density_adjust = 0;
   p.mediatype = header.MediaType;
   p.duplex = header.Duplex;
   p.tumble = header.Tumble;
