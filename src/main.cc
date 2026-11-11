@@ -53,6 +53,33 @@ bool next_line(std::vector<uint8_t> &buf) {
 }
 
 
+// The raster page header's string fields are fixed-size arrays read straight
+// from the input stream; nothing guarantees they are NUL-terminated. Force
+// termination so later strlen/std::string reads stay inside the arrays.
+template <size_t N>
+void terminate(char (&s)[N]) {
+  s[N - 1] = '\0';
+}
+
+template <size_t N, size_t M>
+void terminate(char (&s)[N][M]) {
+  for (size_t i = 0; i < N; ++i) {
+    s[i][M - 1] = '\0';
+  }
+}
+
+void sanitize_header(cups_page_header2_t &h) {
+  terminate(h.MediaClass);
+  terminate(h.MediaColor);
+  terminate(h.MediaType);
+  terminate(h.OutputType);
+  terminate(h.cupsString);
+  terminate(h.cupsMarkerType);
+  terminate(h.cupsRenderingIntent);
+  terminate(h.cupsPageSizeName);
+}
+
+
 bool plain_ascii_string(const char *str) {
   bool result = true;
   for (; result && *str; str++) {
@@ -178,6 +205,7 @@ int main(int argc, char *argv[]) {
     job job(stdout, ascii_job_name(job_id, job_user, job_name));
     cups_page_header2_t header;
     while (!interrupted && cupsRasterReadHeader2(ras, &header)) {
+      sanitize_header(header);
       if (header.cupsBitsPerPixel != 1
           || header.cupsBitsPerColor != 1
           || header.cupsNumColors != 1
